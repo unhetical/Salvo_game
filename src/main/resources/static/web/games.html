@@ -20,12 +20,14 @@
 
     <main id="app" class="content">
 
-        <div class="content">
+        <div class="content65">
             <form id="login-form" onsubmit="return false" class="log" v-if="current==null">
                 <label>Name: <input type="text" id="username"></label>
                 <label>Password: <input type="password" id="password"></label>
+                <div>
                 <button @click="login">Log in</button>
                 <button @click="signUp">SignUp</button>
+                </div>
             </form>
 
             <div class="content" v-else>
@@ -39,8 +41,8 @@
         <div class="content">
             <h4 class="textBlack">Games</h4>
             <ol class="list-group">
-                <li class="list-group-item" v-for="value in games">Date: {{value.date}}<span v-for="player in value.gamePlayers">
-                        , {{player.players.email}}</span></li>
+                <li class="list-group-item" v-for="game in games">Date: {{game.date}}<span v-for="player in game.gamePlayers">
+                        , {{player.players.email}}</span> <button v-if="buttonsOn(game)" v-else @click="join(game)">Join Game</button></li>
             </ol>
         </div>
 

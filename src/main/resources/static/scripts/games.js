@@ -34,17 +34,22 @@ var app = new Vue({
                 },
                 method: 'POST',
                 body: 'name=' + username + '&pwd=' + password,
-            }).then(function (data) {
+            }).then(function (response) {
                 console.log("i'm login");
-                console.log('Request success: ', data);
-                if(data.status == 200){
+                console.log('Request success: ', response);
+                if (response.status == 200) {
                     location.reload();
-            alert("correct login!")}
-            if(data.status == 403){
-                alert("review email or password")
-            } if (data.status == 401){
-                alert("this player not exist, signin please")
-            }
+                    alert("correct login!")
+                }
+                if (response.status == 403) {
+                    alert("review email or password")
+                }
+                if (response.status == 406) {
+                    alert("this player not exist, signin please")
+                }
+            }).then(function (data) {
+                console.log('Request success: ', data);
+                console.log(data.ERROR);
             }).catch(function (error) {
                 console.log('Request failure: ', error);
             })
@@ -57,11 +62,14 @@ var app = new Vue({
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
                 method: 'POST',
-            }).then(function (data) {
+            }).then(function (response) {
                 console.log("bye bye");
-                console.log('Request success: ', data);
+                console.log('Request success: ', response);
                 location.reload();
                 alert("correct logout!")
+            }).then(function (data) {
+                console.log('Request success: ', data);
+                console.log(data.ERROR);
             }).catch(function (error) {
                 console.log('Request failure: ', error);
             });
@@ -71,26 +79,55 @@ var app = new Vue({
             var username = document.getElementById("username").value;
             var password = document.getElementById("password").value;
             fetch("/api/players", {
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                method: 'POST',
-                body: 'email=' + username + '&password=' + password,
-            }).then(function (data) {
-                console.log(data.status);
-                console.log('Request success: ', data);
-                if(data.status == 201){
-                    alert("player created! , login please")}
-                    if (data.status == 401){
-                        alert("this player already exist, login please")}
-                        if (data.status == 403){
-                            alert("incomplete name or password")}
-            }).catch(function (error) {
-                console.log("error");
-                console.log('Request failure: ', error);
-            })
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    method: 'POST',
+                    body: 'email=' + username + '&password=' + password,
+                }).then(function (response) {
+                    console.log('Request success: ', response);
+                    if (response.status == 201) {
+                        app.login();
+                        alert("player created!")
+                    }
+                    if (response.status == 401) {
+                        alert("this player already exist, login please")
+                    }
+                    if (response.status == 403) {
+                        alert("incomplete name or password")
+                    }
+
+                }).then(function (data) {
+                    console.log('Request success: ', data);
+                    console.log(data.ERROR);
+                })
+                .catch(function (error) {
+                    console.log('Request failure: ', error);
+                })
         },
+
+
+        buttonsOn: function (game) {
+            if (this.current != null) {
+                for (var i = 0; i < game.gamePlayers.length; i++) {
+                    if (game.gamePlayers[i].players.id == this.current.id) {
+                        return true;
+                    }
+                }
+            }
+        },
+
+        join: function (game) {
+            if (this.current != null) {
+                for (var i = 0; i < game.gamePlayers.length; i++) {
+                    if (game.gamePlayers[i].players.id == this.current.id) {
+                        return location.href = "/web/game.html?gp=" + game.gamePlayers[i].players.id;
+                    }
+                }
+            }
+        },
+
 
         allPlayers: function () {
             for (var i = 0; i < app.totalPlayers.length; i++) {

@@ -7,10 +7,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -95,12 +92,12 @@ public class SalvoController {
 
     @RequestMapping("/game_view/{id}")
     public Map<String, Object> gameDTOId(@PathVariable Long id) {
-        GamePlayer current = gamePlayerRepository.getOne(id);
-        Map<String, Object> dto = gameDTO(current.getGame());
-        dto.put("Ships", current.getShipSet().stream().map(ship -> shipsDTO(ship))
-                .collect(Collectors.toList()));
-        Set<GamePlayer> gamePlayerSet = current.getGame().getGamePlayerSet();
-        dto.put("Salvos", createSalvosDTO(gamePlayerSet));
+            GamePlayer current = gamePlayerRepository.getOne(id);
+            Map<String, Object> dto = gameDTO(current.getGame());
+                dto.put("Ships", current.getShipSet().stream().map(ship -> shipsDTO(ship))
+                        .collect(Collectors.toList()));
+                Set<GamePlayer> gamePlayerSet = current.getGame().getGamePlayerSet();
+                dto.put("Salvos", createSalvosDTO(gamePlayerSet));
         return dto;
     }
 
@@ -128,15 +125,6 @@ public class SalvoController {
         return dto;
     }
 
-  /*  @RequestMapping("/leaderboard")
-    public List<Object> findAll() {
-        return playerRepository
-                .findAll()
-                .stream()
-                .map(player -> playersDTO(player))
-                .collect(Collectors.toList());
-    }*/
-
     private Map<String, Object> playersDTO(Player player) {
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("id", player.getId());
@@ -157,33 +145,25 @@ public class SalvoController {
         return dto;
     }
 
-/*
-    @RequestMapping(path = "/players", method = RequestMethod.POST)
-    public ResponseEntity<String> createPlayer(@RequestParam String email, String password) {
-        if (email.isEmpty()) {
-            return new ResponseEntity<>("No email", HttpStatus.FORBIDDEN);
-        }
-        Player player = playerRepository.findByEmail(email);
-        if (player != null) {
-            return new ResponseEntity<>("Name already used", HttpStatus.CONFLICT);
-        }
-        playerRepository.save(new Player(email, password));
-        return new ResponseEntity<>("Named added", HttpStatus.CREATED);
-    }
-*/
-
     @RequestMapping(path = "/players", method = RequestMethod.POST)
     public ResponseEntity<Object> register(
             @RequestParam String email, @RequestParam String password) {
 
         if (email.isEmpty() || password.isEmpty()) {
-            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("ERROR", "No name"), HttpStatus.FORBIDDEN);
         }
 
         if (playerRepository.findByEmail(email) !=  null) {
-            return new ResponseEntity<>("Name already in use", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(makeMap("ERROR", "Name already in use"), HttpStatus.UNAUTHORIZED);
         }
         playerRepository.save(new Player(email, password));
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(makeMap("ERROR", "created"), HttpStatus.CREATED);
+    }
+
+
+    private Map<String, Object> makeMap(String key, Object value) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(key, value);
+        return map;
     }
 }

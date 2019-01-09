@@ -13,7 +13,6 @@ public class Player {
     @GenericGenerator(name = "native", strategy = "native")
 
     private Long id;
-    private String userName;
     private String email;
     private String password;
 
