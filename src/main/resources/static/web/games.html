@@ -1,0 +1,77 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="/styles/game.css">
+    <title>Salvo web</title>
+</head>
+
+<body class="body-games">
+
+    <header class="content">
+        <div class="logoSalvo">
+            <img src="/styles/img/logo.png" class="logo">
+        </div>
+    </header>
+
+    <main id="app" class="content">
+
+        <div class="content">
+            <form id="login-form" onsubmit="return false" class="log" v-if="current==null">
+                <label>Name: <input type="text" id="username"></label>
+                <label>Password: <input type="password" id="password"></label>
+                <button @click="login">Log in</button>
+                <button @click="signUp">SignUp</button>
+            </form>
+
+            <div class="content" v-else>
+                <form id="logout-form" onsubmit="return false">
+                    <button @click="logout">Log out</button>
+                </form>
+            </div>
+
+        </div>
+
+        <div class="content">
+            <h4 class="textBlack">Games</h4>
+            <ol class="list-group">
+                <li class="list-group-item" v-for="value in games">Date: {{value.date}}<span v-for="player in value.gamePlayers">
+                        , {{player.players.email}}</span></li>
+            </ol>
+        </div>
+
+
+        <div class="content">
+            <h4 class="textBlack">Leaderboard</h4>
+            <table class="table-bordered">
+                <thead class="table">
+                    <th>Position</th>
+                    <th>Name</th>
+                    <th>Total</th>
+                    <th>Won</th>
+                    <th>Lost</th>
+                    <th>Tied</th>
+                </thead>
+                <tbody class="table">
+                    <tr v-for="(value, index) in totalPlayers">
+                        <td>{{index+1}}</td>
+                        <td>{{value.email}}</td>
+                        <td>{{value.totalScore}}</td>
+                        <td>{{value.won}}</td>
+                        <td>{{value.lost}}</td>
+                        <td>{{value.tied}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="/scripts/games.js"></script>
+</body>
+
+</html>
