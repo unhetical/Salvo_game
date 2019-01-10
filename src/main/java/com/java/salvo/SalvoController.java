@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -46,6 +45,8 @@ public class SalvoController {
     private boolean isGuest(Authentication authentication) {
         return authentication == null || authentication instanceof AnonymousAuthenticationToken;
     }
+
+
 
     public List<Object> getAll() {
         return gameRepository
@@ -91,14 +92,21 @@ public class SalvoController {
     }
 
     @RequestMapping("/game_view/{id}")
-    public Map<String, Object> gameDTOId(@PathVariable Long id) {
+    public ResponseEntity<Object> gameDTOId(@PathVariable Long id, Authentication authentication) {
             GamePlayer current = gamePlayerRepository.getOne(id);
+            Player logged = playerRepository.findByEmail(authentication.getName());
+
+        if (current.getPlayer().getId().equals(logged.getId())) {
             Map<String, Object> dto = gameDTO(current.getGame());
-                dto.put("Ships", current.getShipSet().stream().map(ship -> shipsDTO(ship))
-                        .collect(Collectors.toList()));
-                Set<GamePlayer> gamePlayerSet = current.getGame().getGamePlayerSet();
-                dto.put("Salvos", createSalvosDTO(gamePlayerSet));
-        return dto;
+            dto.put("gameplayers", current.getShipSet().stream().map(ship -> shipsDTO(ship))
+                    .collect(Collectors.toList()));
+            dto.put("Ships", current.getShipSet().stream().map(ship -> shipsDTO(ship))
+                    .collect(Collectors.toList()));
+            Set<GamePlayer> gamePlayerSet = current.getGame().getGamePlayerSet();
+            dto.put("Salvos", createSalvosDTO(gamePlayerSet));
+            return new ResponseEntity<>(dto, HttpStatus.ACCEPTED);
+        }
+        return new ResponseEntity<>(makeMap("ERROR", "Return back CHEATER!"), HttpStatus.UNAUTHORIZED);
     }
 
     private Map<String, Object> shipsDTO(Ship ship) {
@@ -145,12 +153,23 @@ public class SalvoController {
         return dto;
     }
 
+    @RequestMapping(path = "/games", method = RequestMethod.POST)
+    public ResponseEntity<Object> createGame(Authentication authentication) {
+        Player currentPlayer = playerRepository.findByEmail(authentication.getName());
+        if (!isGuest(authentication)) {
+            Game currentGame = gameRepository.save(new Game());
+            GamePlayer currentGp = gamePlayerRepository.save(new GamePlayer(currentPlayer, currentGame));
+           return new ResponseEntity<>(makeMap("gpID", currentGp.getId()), HttpStatus.CREATED);
+        }
+        return new ResponseEntity<>(makeMap("ERROR", "SignUp first for play"), HttpStatus.UNAUTHORIZED);
+    }
+
     @RequestMapping(path = "/players", method = RequestMethod.POST)
     public ResponseEntity<Object> register(
             @RequestParam String email, @RequestParam String password) {
 
         if (email.isEmpty() || password.isEmpty()) {
-            return new ResponseEntity<>(makeMap("ERROR", "No name"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("ERROR", "Empty input"), HttpStatus.FORBIDDEN);
         }
 
         if (playerRepository.findByEmail(email) !=  null) {
@@ -159,7 +178,6 @@ public class SalvoController {
         playerRepository.save(new Player(email, password));
         return new ResponseEntity<>(makeMap("ERROR", "created"), HttpStatus.CREATED);
     }
-
 
     private Map<String, Object> makeMap(String key, Object value) {
         Map<String, Object> map = new HashMap<>();

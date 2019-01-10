@@ -3,7 +3,8 @@ var app = new Vue({
     data: {
         games: [],
         totalPlayers: [],
-        current: null
+        current: null,
+        gpID: null
     },
 
     methods: {
@@ -35,21 +36,12 @@ var app = new Vue({
                 method: 'POST',
                 body: 'name=' + username + '&pwd=' + password,
             }).then(function (response) {
-                console.log("i'm login");
+                if(response.ok){
                 console.log('Request success: ', response);
-                if (response.status == 200) {
-                    location.reload();
-                    alert("correct login!")
-                }
-                if (response.status == 403) {
-                    alert("review email or password")
-                }
-                if (response.status == 406) {
-                    alert("this player not exist, signin please")
-                }
+                location.reload();
+                alert("correct login!")}
             }).then(function (data) {
                 console.log('Request success: ', data);
-                console.log(data.ERROR);
             }).catch(function (error) {
                 console.log('Request failure: ', error);
             })
@@ -63,13 +55,11 @@ var app = new Vue({
                 },
                 method: 'POST',
             }).then(function (response) {
-                console.log("bye bye");
                 console.log('Request success: ', response);
                 location.reload();
                 alert("correct logout!")
             }).then(function (data) {
                 console.log('Request success: ', data);
-                console.log(data.ERROR);
             }).catch(function (error) {
                 console.log('Request failure: ', error);
             });
@@ -88,24 +78,40 @@ var app = new Vue({
                 }).then(function (response) {
                     console.log('Request success: ', response);
                     if (response.status == 201) {
-                        app.login();
-                        alert("player created!")
+                        return response.json();
                     }
-                    if (response.status == 401) {
-                        alert("this player already exist, login please")
-                    }
-                    if (response.status == 403) {
-                        alert("incomplete name or password")
-                    }
-
+                    throw Error (response);
                 }).then(function (data) {
+                    alert("player created!")
                     console.log('Request success: ', data);
-                    console.log(data.ERROR);
+                    app.login();
                 })
                 .catch(function (error) {
                     console.log('Request failure: ', error);
+                    alert("player in use")
                 })
         },
+
+        createGame: function () {
+            fetch("/api/games", {
+                credentials: 'include',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                method: 'POST',
+            }).then(function (response) {
+                return response.json();
+
+            }).then(function (data) {
+                console.log("data", data);
+                app.gpID = data.gpID
+                window.location = '/web/game.html?gp=' + app.gpID;
+            }).catch(function (error) {
+
+            })
+        },
+
 
 
         buttonsOn: function (game) {
@@ -118,7 +124,7 @@ var app = new Vue({
             }
         },
 
-        join: function (game) {
+        enter: function (game) {
             if (this.current != null) {
                 for (var i = 0; i < game.gamePlayers.length; i++) {
                     if (game.gamePlayers[i].players.id == this.current.id) {

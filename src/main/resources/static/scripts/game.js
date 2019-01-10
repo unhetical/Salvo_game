@@ -16,7 +16,7 @@ var app = new Vue({
         opponentPlayer: [],
         positionShip: [],
         positionSalvo: [],
-        turn:[],
+        turn: [],
         letters: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"],
         numeros: [null, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     },
@@ -26,27 +26,24 @@ var app = new Vue({
         fetchInit: function () {
             var parsedUrl = new URL(window.location.href);
             fetch("/api/game_view/" + parsedUrl.searchParams.get("gp"), )
-                .then(function (data) {
-                    return data.json();
+                .then(function (response) {
+                    console.log('Request success: ', response);
+                    if (response.ok) {
+                        return response.json();
+                    }else{
+                    alert("Unauthorized, return back CHEATER");}
                 }).then(function (myData) {
-
                     app.games = myData;
                     console.log("games", app.games);
-
                     app.ships = myData.Ships;
                     console.log("ships Current player", app.ships);
-
                     app.salvos = myData.Salvos;
                     console.log("salvos", app.salvos);
-
                     app.ocupado();
-
                     app.tiros(parsedUrl);
                     console.log("salvosCurrent", app.salvosCurrent);
-
                     app.gamePlayer = myData.gamePlayers;
                     console.log("gamePlayer", app.gamePlayer);
-
                     app.local(parsedUrl);
                     console.log("currentPlayer", app.currentPlayer);
                     console.log("opponentPlayer", app.opponentPlayer);

@@ -33,6 +33,7 @@
             <div class="content" v-else>
                 <form id="logout-form" onsubmit="return false">
                     <button @click="logout">Log out</button>
+                    <button @click="createGame">New Game</button>
                 </form>
             </div>
 
@@ -42,7 +43,7 @@
             <h4 class="textBlack">Games</h4>
             <ol class="list-group">
                 <li class="list-group-item" v-for="game in games">Date: {{game.date}}<span v-for="player in game.gamePlayers">
-                        , {{player.players.email}}</span> <button v-if="buttonsOn(game)" v-else @click="join(game)">Join Game</button></li>
+                        , {{player.players.email}}</span> <button v-if="buttonsOn(game)" v-else @click="enter(game)">Enter Game</button></li>
             </ol>
         </div>
 
