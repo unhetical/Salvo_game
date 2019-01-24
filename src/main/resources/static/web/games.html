@@ -12,43 +12,43 @@
 
 <body class="body-games">
 
-    <header class="content">
+    <header>
         <div class="logoSalvo">
             <img src="/styles/img/logo.png" class="logo">
         </div>
     </header>
 
-    <main id="app" class="content">
+    <main id="app">
 
         <div class="content65">
             <form id="login-form" onsubmit="return false" class="log" v-if="current==null">
-                <label>Name: <input type="text" id="username"></label>
+                <label>Name: <input type="email" id="username"></label>
                 <label>Password: <input type="password" id="password"></label>
                 <div>
-                <button @click="login">Log in</button>
-                <button @click="signUp">SignUp</button>
+                <button @click="login" class="btn btn-primary btn-md">Log in</button>
+                <button @click="signUp" class="btn btn-primary btn-md">SignUp</button>
                 </div>
             </form>
 
-            <div class="content" v-else>
+            <div v-else>
                 <form id="logout-form" onsubmit="return false">
-                    <button @click="logout">Log out</button>
-                    <button @click="createGame">New Game</button>
+                    <button @click="logout"  class="btn btn-primary btn-md">Log out</button>
+                    <button @click="createGame"  class="btn btn-primary btn-md">New Game</button>
                 </form>
             </div>
 
         </div>
 
-        <div class="content">
+        <div>
             <h4 class="textBlack">Games</h4>
             <ol class="list-group">
                 <li class="list-group-item" v-for="game in games">Date: {{game.date}}<span v-for="player in game.gamePlayers">
-                        , {{player.players.email}}</span> <button v-if="buttonsOn(game)" v-else @click="enter(game)">Enter Game</button></li>
+                        , {{player.players.email}}</span> <button  class="btn btn-primary btn-md" v-if="showEnter(game)" @click="enterGame(game)">Enter Game</button> <button  class="btn btn-primary btn-md" v-else-if="showJoin(game)" @click="joinGame(game)">Join Game</button></li>
             </ol>
         </div>
 
 
-        <div class="content">
+        <div>
             <h4 class="textBlack">Leaderboard</h4>
             <table class="table-bordered">
                 <thead class="table">

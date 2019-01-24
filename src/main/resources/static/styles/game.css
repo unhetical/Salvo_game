@@ -1,35 +1,33 @@
-
-
-@font-face{ 
-	font-family: 'seasrn';
-	src: url('seasrn__.woff');
-	src: url('seasrn__.woff') format('eot'),
-	     url('seasrn__.woff') format('woff'),
-	     url('seasrn__.woff') format('truetype'),
-	     url('seasrn__.woff') format('svg');
+@font-face {
+  font-family: 'seasrn';
+  src: url('seasrn__.woff');
+  src: url('seasrn__.woff') format('eot'),
+    url('seasrn__.woff') format('woff'),
+    url('seasrn__.woff') format('truetype'),
+    url('seasrn__.woff') format('svg');
 }
+
 /*-----TITLE----*/
 
-.logoSalvo{
+.logoSalvo {
   width: 100px;
   height: 100px;
 }
 
-.logo{
+.logo {
   width: 100px;
   height: 100px;
 }
 
 .title {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: space-around;
   align-content: center;
   justify-items: center;
   align-items: center;
-  padding-top: 20px;
   width: 100%;
-  height: 200px;
+  height: 150px;
   color: white;
 }
 
@@ -39,11 +37,9 @@
   justify-content: space-around;
   align-content: center;
   justify-items: center;
-  width: 100%;
-  height: 60px;
 }
 
-.playerstitle>h3{
+.playerstitle>h3 {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -51,9 +47,8 @@
   align-items: center;
   background-color: black;
   font-family: arcade;
-  padding: 4px;
-  color:yellow;
-  height: 30px;
+  padding: 5px;
+  color: yellow;
   border: 2px dotted white;
 }
 
@@ -62,7 +57,7 @@
   width: 20%;
 }
 
-.scores{
+.scores {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -83,7 +78,7 @@
   height: 20px;
 }
 
-.scores>h1{
+.scores>h1 {
   font-family: arcade;
   color: yellow;
   font-size: 40px;
@@ -95,7 +90,7 @@
 
 /*-----------BODY--------*/
 /*-------LOGIN------*/
-.log{
+.log {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -103,20 +98,20 @@
   color: black;
 }
 
-input{
+input {
   color: darkblue;
 }
 
-button{
+button {
   background-color: darkblue;
   color: white;
 }
 
-a{
+a {
   color: white;
 }
 
-.textBlack{
+.textBlack {
   color: black;
 }
 
@@ -141,7 +136,7 @@ a{
   width: 100%;
 }
 
-.container-fluid{
+.container-fluid {
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -151,6 +146,7 @@ a{
 
 .content {
   width: 100%;
+  height: 40px;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -161,12 +157,12 @@ a{
 }
 
 .content65 {
-width: 65%;
+  width: 65%;
 }
 
 /*-----TABLES------*/
 
-.table-bordered{
+.table-bordered {
   width: 50%;
   height: 200px;
   color: white;
@@ -180,48 +176,50 @@ width: 65%;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-around;
 }
 
 .table1 {
+  table-layout: fixed;
   background-image: url("img/mar.jpg");
   background-size: cover;
   background-position: center;
   border: 2px solid black;
-  width: 40%;
+  width: 35%;
 }
 
 .th {
   background-color: rgb(77, 77, 77);
   border: 2px solid black;
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   text-align: center;
 }
 
-th{
+th {
   text-align: center;
 }
 
-td{
+td {
   text-align: center;
 }
 
 .cells {
   border: 2px solid black;
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   text-align: center;
+  padding: 0px;
 }
 
 .letras {
   background-color: rgb(77, 77, 77);
+  padding: 0px;
 }
 
 .barco {
   border: 2px solid black;
-  width: 50px;
-  height: 50px;
+  width: 39px;
+  height: 39px;
   background-image: url("img/pirate_ship.png");
   background-size: cover;
   background-position: center;
@@ -230,22 +228,98 @@ td{
 .shoot {
   text-align: center;
   border: 2px solid black;
-  width: 50px;
-  height: 50px;
+  width: 39px;
+  height: 39px;
   background-image: url("https://media.giphy.com/media/oe33xf3B50fsc/giphy.gif");
   background-size: contain;
   background-position: center;
 }
 
-/*-----LIST------*/
-.list-group{
+/*--------LIST---------*/
+.list-group {
   width: 50%;
   background-color: black;
   opacity: 0.6;
 }
 
-.list-group-item{
+.list-group-item {
   width: 100%;
   background-color: transparent;
   color: white;
+}
+
+/*---------SHIPS---------*/
+
+.locateShips {
+  width: 20%;
+}
+
+.aircraftCarrier {
+  width: 199px;
+  height: 39px;
+  background-image: url(/styles/img/kisspng-warship-freedom-class-littoral-combat-ship-uss-fre-ship-5ac0bd64ad2213.0868376015225808367092\ \(1\).png);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border: 2px dashed yellowgreen;
+  cursor: pointer;
+}
+
+.battleship {
+  width: 159px;
+  background-image: url(/styles/img/kisspng-watercraft-cruise-ship-navigation-5a6cd94f55b0c1.918367711517082959351.png);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 39px;
+  border: 2px dashed yellowgreen;
+  cursor: pointer;
+}
+
+.submarine {
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url(/styles/img/kisspng-enforcer-amphibious-transport-dock-amphibious-warf-littorioclass-battleship-5b06d0b04fff30.7179860215271732963277.png);
+  width: 119px;
+  height: 39px;
+  border: 2px dashed yellowgreen;
+  cursor: pointer;
+}
+
+.destroyer {
+  background-image: url(/styles/img/kisspng-warship-freedom-class-littoral-combat-ship-uss-fre-ship-5ac0bd64ad2213.0868376015225808367092.png);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 119px;
+  height: 39px;
+  border: 2px dashed yellowgreen;
+  cursor: pointer;
+}
+
+.patrolBoat {
+  background-image: url(/styles/img/kisspng-frigate-ship-patrol-boat-drawing-fast-attack-craft-corvette-5ac6d52508bed0.7711393015229801330359.png);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 79px;
+  height: 39px;
+  border: 2px dashed yellowgreen;
+  cursor: pointer;
+}
+
+/*-------DRAG AND DROP------*/
+
+.invisible {
+  display: none;
+}
+
+.coloredCell {
+  border: 2px solid black;
+  width: 39px;
+  height: 39px;
+  text-align: center;
+  padding: 0px;
+  background-color: rgb(73, 226, 43);
 }

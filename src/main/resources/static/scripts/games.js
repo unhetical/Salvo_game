@@ -36,10 +36,12 @@ var app = new Vue({
                 method: 'POST',
                 body: 'name=' + username + '&pwd=' + password,
             }).then(function (response) {
-                if(response.ok){
-                console.log('Request success: ', response);
-                location.reload();
-                alert("correct login!")}
+                if (response.ok) {
+                    console.log('Request success: ', response);
+                    location.reload();
+                    alert("correct login!")
+                } else{
+                alert("error");}
             }).then(function (data) {
                 console.log('Request success: ', data);
             }).catch(function (error) {
@@ -80,7 +82,7 @@ var app = new Vue({
                     if (response.status == 201) {
                         return response.json();
                     }
-                    throw Error (response);
+                    throw Error(response);
                 }).then(function (data) {
                     alert("player created!")
                     console.log('Request success: ', data);
@@ -114,7 +116,7 @@ var app = new Vue({
 
 
 
-        buttonsOn: function (game) {
+        showEnter: function (game) {
             if (this.current != null) {
                 for (var i = 0; i < game.gamePlayers.length; i++) {
                     if (game.gamePlayers[i].players.id == this.current.id) {
@@ -124,16 +126,42 @@ var app = new Vue({
             }
         },
 
-        enter: function (game) {
+        showJoin: function (game) {
+            for (var i = 0; i < game.gamePlayers.length; i++) {
+                if (game.gamePlayers.length == 1 && this.current != null) {
+                    return true;
+                }
+            }
+        },
+
+        enterGame: function (game) {
             if (this.current != null) {
                 for (var i = 0; i < game.gamePlayers.length; i++) {
                     if (game.gamePlayers[i].players.id == this.current.id) {
-                        return location.href = "/web/game.html?gp=" + game.gamePlayers[i].players.id;
+                        return location.href = "/web/game.html?gp=" + game.gamePlayers[i].id;
                     }
                 }
             }
         },
 
+        joinGame: function (game) {
+            fetch("/api/game/" + game.id + "/players", {
+                credentials: 'include',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                method: 'POST',
+            }).then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                console.log("data", data);
+                app.gpID = data.gpID
+            window.location = '/web/game.html?gp=' + app.gpID;
+            }).catch(function (error) {
+
+            })
+        },
 
         allPlayers: function () {
             for (var i = 0; i < app.totalPlayers.length; i++) {

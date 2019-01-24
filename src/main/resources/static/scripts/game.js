@@ -7,6 +7,7 @@ var app = new Vue({
         tiroCurrent: [],
         tiroOppo: [],
         salvos: [],
+        positions: [],
         salvosCurrent: [],
         salvosOppo: [],
         gamePlayer: [],
@@ -18,20 +19,43 @@ var app = new Vue({
         positionSalvo: [],
         turn: [],
         letters: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"],
-        numeros: [null, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        numeros: [null, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        parsedUrl: null,
+        idShip: null,
+        shipLocation: [{
+                shipName: "battleship",
+                locations: []
+            },
+            {
+                shipName: "Submarine",
+                locations: []
+            },
+            {
+                shipName: "Destroyer",
+                locations: []
+            },
+            {
+                shipName: "Patrol Boat",
+                locations: []
+            },
+            {
+                shipName: "Aircraft carrier",
+                locations: []
+            },
+        ]
     },
 
     methods: {
 
         fetchInit: function () {
-            var parsedUrl = new URL(window.location.href);
-            fetch("/api/game_view/" + parsedUrl.searchParams.get("gp"), )
+            this.parsedUrl = new URL(window.location.href);
+            fetch("/api/game_view/" + this.parsedUrl.searchParams.get("gp"), )
                 .then(function (response) {
                     console.log('Request success: ', response);
                     if (response.ok) {
                         return response.json();
-                    }else{
-                    alert("Unauthorized, return back CHEATER");}
+                    }
+                    alert("Unauthorized, return back CHEATER");
                 }).then(function (myData) {
                     app.games = myData;
                     console.log("games", app.games);
@@ -40,11 +64,11 @@ var app = new Vue({
                     app.salvos = myData.Salvos;
                     console.log("salvos", app.salvos);
                     app.ocupado();
-                    app.tiros(parsedUrl);
+                    app.tiros();
                     console.log("salvosCurrent", app.salvosCurrent);
                     app.gamePlayer = myData.gamePlayers;
                     console.log("gamePlayer", app.gamePlayer);
-                    app.local(parsedUrl);
+                    app.local();
                     console.log("currentPlayer", app.currentPlayer);
                     console.log("opponentPlayer", app.opponentPlayer);
                 })
@@ -67,9 +91,34 @@ var app = new Vue({
             });
         },
 
-        local: function (parsedUrl) {
+        placeShips: function () {
+            fetch("/api/games/players/" + this.parsedUrl.searchParams.get("gp") + "/ships", {
+                    credentials: 'include',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    method: 'POST',
+                    body: JSON.stringify(
+                        app.shipLocation
+                    )
+                }).then(function (response) {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        alert(response.status)
+                    }
+                }).then(function (data) {
+                    console.log("placeships", data);
+                })
+                .catch(function (error) {
+                    console.log('Request failure: ', error);
+                });
+        },
+
+        local: function () {
             for (let x = 0; x < this.gamePlayer.length; x++) {
-                if (this.gamePlayer[x].id == parsedUrl.searchParams.get("gp")) {
+                if (this.gamePlayer[x].id == this.parsedUrl.searchParams.get("gp")) {
                     this.currentPlayer = this.gamePlayer[x].players;
                     this.currentScore = this.gamePlayer[x].scores;
                 } else {
@@ -78,12 +127,11 @@ var app = new Vue({
                 }
             }
             if (this.gamePlayer.length < 2) {
-                this.opponentPlayer.players.email = "(wait opponent player)";
+                this.opponentPlayer.email = "(wait opponent player)";
             }
         },
 
         ocupado: function () {
-
             for (let i = 0; i < this.games.Ships.length; i++) {
                 for (let j = 0; j < this.games.Ships[i].location.length; j++) {
                     this.positionShip = this.games.Ships[i].location[j];
@@ -94,22 +142,20 @@ var app = new Vue({
             }
         },
 
-        tiros: function (parsedUrl) {
+        tiros: function () {
             for (let key in this.salvos) {
                 for (let key1 in this.salvos[key]) {
                     this.positionSalvo = this.salvos[key][key1];
-
-
                     for (var i = 0; i < this.positionSalvo.length; i++) {
-
-                        if (key == parsedUrl.searchParams.get("gp")) {
+                        if (key == this.parsedUrl.searchParams.get("gp")) {
                             this.tiroCurrent = document.getElementById(2 + this.positionSalvo[i]);
+                            console.log(this.tiroCurrent);
+                            console.log(2 + this.positionSalvo[i])
                             this.tiroCurrent.classList.remove('cells');
                             this.tiroCurrent.classList.add('shoot');
                             this.tiroCurrent.textContent = key1;
-
                         };
-                        if (key != parsedUrl.searchParams.get("gp")) {
+                        if (key != this.parsedUrl.searchParams.get("gp")) {
                             this.tiroOppo = document.getElementById(this.positionSalvo[i]);
                             if (this.tiroOppo.classList[0] == 'barco') {
                                 this.tiroOppo.classList.remove('barco');
@@ -122,11 +168,67 @@ var app = new Vue({
                     }
                 }
             }
+        },
+
+        dragstart_handler: function (ev) {
+            this.idShip = ev.target.id;
+            setTimeout(() => ev.target.className = "invisible", 0);
+        },
+
+        dragend_handler: function (ev) {
+            ev.target.className = ev.target.id;
+        },
+
+        dragover_handler: function (ev) {
+            ev.preventDefault();
+        },
+
+        dragenter_handler: function (ev) {
+            this.positions = [];
+            var celdasP = document.getElementsByClassName("cells");
+            for (let i = 0; i < celdasP.length; i++) {
+                celdasP[i].classList.remove("coloredCell");
+            }
+            var selectedCell = document.getElementById(ev.target.id);
+            var shipSize = document.getElementById(this.idShip).getAttribute("data-size");
+            var shipPos = document.getElementById(this.idShip).getAttribute("data-pos");
+            var num = +selectedCell.id.slice(1);
+            var letra = selectedCell.id.slice(0, 1);
+
+
+            if (shipPos == "horizontal") {
+                for (let i = 0; i < shipSize; i++) {
+                    if (num + i < 11) {
+                        var idCell = letra + (num + i);
+                        var pintar = document.getElementById(idCell);
+                        pintar.classList.add("coloredCell");
+                        this.positions.push(idCell);
+
+                        for (let x = 0; x < this.shipLocation.length; x++) {
+                            if (this.shipLocation[x].shipName == this.idShip) {
+                                this.shipLocation.locations.push(this.positions);
+                            }
+                        }
+                    }
+                }
+                console.log("positions",this.positions);
+                console.log("shipLocation",this.shipLocation);
+            }
+
+
+        },
+
+        drop_handler: function (ev) {
+            var celdasP = document.getElementsByClassName("cells");
+            for (let i = 0; i < celdasP.length; i++) {
+                celdasP[i].classList.remove("coloredCell");
+            }
+            ev.preventDefault();
+            var ship = document.getElementById(this.idShip);
+            ev.target.appendChild(ship);
         }
     },
-
     created: function () {
         this.fetchInit();
-
     },
 })
