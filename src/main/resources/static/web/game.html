@@ -80,16 +80,18 @@
                     </tbody>
                 </table>
 
+                <button class="btn btn-primary btn-md" @click="placeShips()">placeShips</button>
                 <div class="locateShips" @drop="drop_handler" @dragover="dragover_handler">
-                    <div class="aircraftCarrier" data-size="5" data-pos="horizontal" id="aircraftCarrier" draggable="true"
+                    <div class="AircraftCarrier" data-size="5" data-pos="horizontal" id="AircraftCarrier" draggable="true"
+                        @dragstart="dragstart_handler" @dragend="dragend_handler"><button class="rotar" @click="rotate(AircraftCarrier)"></button></div>
+
+                    <div class="Submarine" data-size="3" data-pos="horizontal" id="Submarine" draggable="true"
                         @dragstart="dragstart_handler" @dragend="dragend_handler"></div>
-                    <div class="submarine" data-size="3" data-pos="horizontal" id="submarine" draggable="true"
+                    <div class="Battleship" data-size="4" data-pos="horizontal" id="Battleship" draggable="true"
                         @dragstart="dragstart_handler" @dragend="dragend_handler"></div>
-                    <div class="battleship" data-size="4" data-pos="horizontal" id="battleship" draggable="true"
+                    <div class="Destroyer" data-size="3" data-pos="horizontal" id="Destroyer" draggable="true"
                         @dragstart="dragstart_handler" @dragend="dragend_handler"></div>
-                    <div class="destroyer" data-size="3" data-pos="horizontal" id="destroyer" draggable="true"
-                        @dragstart="dragstart_handler" @dragend="dragend_handler"></div>
-                    <div class="patrolBoat" data-size="2" data-pos="horizontal" id="patrolBoat" draggable="true"
+                    <div class="PatrolBoat" data-size="2" data-pos="horizontal" id="PatrolBoat" draggable="true"
                         @dragstart="dragstart_handler" @dragend="dragend_handler"></div>
                 </div>
             </div>

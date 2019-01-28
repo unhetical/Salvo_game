@@ -235,6 +235,13 @@ td {
   background-position: center;
 }
 
+.rotar{
+  background-color: red;
+  border-radius: 50%;
+  width:20px;
+  height: 20px;
+}
+
 /*--------LIST---------*/
 .list-group {
   width: 50%;
@@ -254,7 +261,7 @@ td {
   width: 20%;
 }
 
-.aircraftCarrier {
+.AircraftCarrier {
   width: 199px;
   height: 39px;
   background-image: url(/styles/img/kisspng-warship-freedom-class-littoral-combat-ship-uss-fre-ship-5ac0bd64ad2213.0868376015225808367092\ \(1\).png);
@@ -265,7 +272,21 @@ td {
   cursor: pointer;
 }
 
-.battleship {
+.AircraftCarrier-v {
+  width: 199px;
+  height: 39px;
+  background-image: url(/styles/img/kisspng-warship-freedom-class-littoral-combat-ship-uss-fre-ship-5ac0bd64ad2213.0868376015225808367092\ \(1\).png);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border: 2px dashed yellowgreen;
+  cursor: pointer;
+  -ms-transform: rotate(90deg); /* IE 9 */
+  -webkit-transform: rotate(90deg); /* Safari 3-8 */
+  transform: rotate(90deg);
+}
+
+.Battleship {
   width: 159px;
   background-image: url(/styles/img/kisspng-watercraft-cruise-ship-navigation-5a6cd94f55b0c1.918367711517082959351.png);
   background-position: center;
@@ -276,7 +297,7 @@ td {
   cursor: pointer;
 }
 
-.submarine {
+.Submarine {
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -287,7 +308,7 @@ td {
   cursor: pointer;
 }
 
-.destroyer {
+.Destroyer {
   background-image: url(/styles/img/kisspng-warship-freedom-class-littoral-combat-ship-uss-fre-ship-5ac0bd64ad2213.0868376015225808367092.png);
   background-position: center;
   background-size: cover;
@@ -298,7 +319,7 @@ td {
   cursor: pointer;
 }
 
-.patrolBoat {
+.PatrolBoat {
   background-image: url(/styles/img/kisspng-frigate-ship-patrol-boat-drawing-fast-attack-craft-corvette-5ac6d52508bed0.7711393015229801330359.png);
   background-position: center;
   background-size: cover;

@@ -184,10 +184,10 @@ public class SalvoController {
     }
 
         @RequestMapping(path="/games/players/{gamePlayerId}/ships", method=RequestMethod.POST)
-        public ResponseEntity<Object> createShips(@PathVariable("gamePlayerId") Long id,
+        public ResponseEntity<Object> createShips(@PathVariable Long gamePlayerId,
         Authentication authentication, @RequestBody Set<Ship> shipSet) {
             Player currentPlayer = playerRepository.findByEmail(authentication.getName());
-            GamePlayer currentGp = gamePlayerRepository.getOne(id);
+            GamePlayer currentGp = gamePlayerRepository.getOne(gamePlayerId);
 
             if (isGuest(authentication)) {
                 return new ResponseEntity<>(makeMap("ERROR", "Login first")
