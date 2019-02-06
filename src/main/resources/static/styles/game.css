@@ -131,7 +131,8 @@ a {
 
 .allbody {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
   justify-content: center;
   width: 100%;
 }
@@ -173,19 +174,20 @@ a {
 .tables {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
   justify-content: space-around;
   width: 100%;
-  margin-bottom: 50px;
+  margin-bottom: 20px;
 }
 
 .table1 {
-  table-layout: fixed;
-  background-image: url("img/mar.jpg");
-  background-size: cover;
+  background-image: url(https://media.giphy.com/media/VuehuL4fMHLgs/giphy.gif);
   background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  table-layout: fixed;
   border: 2px solid black;
-  width: 35%;
+  width: 440px;
+  height: 440px;
 }
 
 .th {
@@ -220,22 +222,17 @@ td {
   padding: 0px;
 }
 
-.barco {
-  border: 2px solid black;
-  width: 39px;
-  height: 39px;
-  background-color: blue;
-}
-
-.shoot {
+.water {
   text-align: center;
   border: 2px solid black;
   width: 39px;
   height: 39px;
-  background-image: url("https://media.giphy.com/media/oe33xf3B50fsc/giphy.gif");
+  background-image: url(https://media.giphy.com/media/JXHhI4o9NCf8k/giphy.gif);
   background-size: contain;
   background-position: center;
 }
+
+
 
 .rotar {
   display: flex;
@@ -261,13 +258,13 @@ td {
 /*---------SHIPS---------*/
 
 .locateShips {
-  width: 20%;
+  width: 50%;
 }
 
 .AircraftCarrier {
   width: 199px;
   height: 39px;
-  background-image: url(/styles/img/kisspng-warship-freedom-class-littoral-combat-ship-uss-fre-ship-5ac0bd64ad2213.0868376015225808367092\ \(1\).png);
+  background-image: url(/styles/img/barco1.png);
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -278,7 +275,7 @@ td {
 .AircraftCarrier-v {
   width: 199px;
   height: 39px;
-  background-image: url(/styles/img/kisspng-aircraft-carrier-amphibious-warfare-ship-navy-fast-5ad893c8e440b5.7496318915241430489349.png);
+  background-image: url(/styles/img/barco1.png);
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -304,7 +301,7 @@ td {
 
 .Battleship {
   width: 159px;
-  background-image: url(/styles/img/kisspng-watercraft-cruise-ship-navigation-5a6cd94f55b0c1.918367711517082959351.png);
+  background-image: url(/styles/img/barco2.png);
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -315,7 +312,7 @@ td {
 
 .Battleship-v {
   width: 159px;
-  background-image: url(/styles/img/kisspng-watercraft-cruise-ship-navigation-5a6cd94f55b0c1.918367711517082959351.png);
+  background-image: url(/styles/img/barco2.png);
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -344,7 +341,7 @@ td {
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
-  background-image: url(/styles/img/kisspng-enforcer-amphibious-transport-dock-amphibious-warf-littorioclass-battleship-5b06d0b04fff30.7179860215271732963277.png);
+  background-image: url(/styles/img/barco3.png);
   width: 119px;
   height: 39px;
   border: 2px dashed yellowgreen;
@@ -355,7 +352,7 @@ td {
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
-  background-image: url(/styles/img/kisspng-enforcer-amphibious-transport-dock-amphibious-warf-littorioclass-battleship-5b06d0b04fff30.7179860215271732963277.png);
+  background-image: url(/styles/img/barco3.png);
   width: 119px;
   height: 39px;
   border: 2px dashed yellowgreen;
@@ -379,7 +376,7 @@ td {
 }
 
 .Destroyer {
-  background-image: url(/styles/img/kisspng-warship-freedom-class-littoral-combat-ship-uss-fre-ship-5ac0bd64ad2213.0868376015225808367092.png);
+  background-image: url(/styles/img/barco4.png);
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -390,7 +387,7 @@ td {
 }
 
 .Destroyer-v {
-  background-image: url(/styles/img/kisspng-warship-freedom-class-littoral-combat-ship-uss-fre-ship-5ac0bd64ad2213.0868376015225808367092.png);
+  background-image: url(/styles/img/barco4.png);
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -417,7 +414,7 @@ td {
 }
 
 .PatrolBoat {
-  background-image: url(/styles/img/kisspng-frigate-ship-patrol-boat-drawing-fast-attack-craft-corvette-5ac6d52508bed0.7711393015229801330359.png);
+  background-image: url(/styles/img/barco5-correcccion.png);
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -428,7 +425,7 @@ td {
 }
 
 .PatrolBoat-v {
-  background-image: url(/styles/img/kisspng-frigate-ship-patrol-boat-drawing-fast-attack-craft-corvette-5ac6d52508bed0.7711393015229801330359.png);
+  background-image: url(/styles/img/barco5-correcccion.png);
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -452,6 +449,16 @@ td {
   -ms-transform-origin: left bottom;
   -o-transform-origin: left bottom;
   transform-origin: left bottom;
+}
+
+.shoot {
+  text-align: center;
+  border: 2px solid black;
+  width: 39px;
+  height: 39px;
+  background-image: url(https://media.giphy.com/media/FnatKdwxRxpVC/giphy.gif);
+  background-size: cover;
+  background-position: center;
 }
 
 /*-------DRAG AND DROP------*/

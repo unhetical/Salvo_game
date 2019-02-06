@@ -210,6 +210,33 @@ public class SalvoController {
             }
         }
 
+    @RequestMapping(path="/games/players/{gamePlayerId}/salvoes", method=RequestMethod.POST)
+    public ResponseEntity<Object> createSalvoes(@PathVariable Long gamePlayerId,
+                                              Authentication authentication, @RequestBody Set<Salvo> salvoSet) {
+        Player currentPlayer = playerRepository.findByEmail(authentication.getName());
+        GamePlayer currentGp = gamePlayerRepository.getOne(gamePlayerId);
+
+        if (isGuest(authentication)) {
+            return new ResponseEntity<>(makeMap("ERROR", "Login first")
+                    , HttpStatus.FORBIDDEN);
+        } else if (currentGp == null) {
+            return new ResponseEntity<>(makeMap("ERROR", "The gamePlayer does not exist")
+                    , HttpStatus.NOT_ACCEPTABLE);
+        } else if (!currentGp.getPlayer().equals(currentPlayer)) {
+            return new ResponseEntity<>(makeMap("ERROR", "Cheater, return to your game!")
+                    , HttpStatus.UNAUTHORIZED);
+        } else if (currentGp.getSalvoSet().equals(null)){
+            return new ResponseEntity<>(makeMap("ERROR", "The salvo are placed, max 5")
+                    , HttpStatus.FOUND);
+        } else {
+            for (Salvo salvo : salvoSet) {
+                salvo.setGamePlayer(currentGp);
+                salvoRepository.save(salvo);
+            }
+            return new ResponseEntity<>(makeMap("ok", "Created"), HttpStatus.CREATED);
+        }
+    }
+
     @RequestMapping(path = "/players", method = RequestMethod.POST)
     public ResponseEntity<Object> register(
             @RequestParam String email, @RequestParam String password) {

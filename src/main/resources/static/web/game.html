@@ -38,6 +38,7 @@
         <main class="allbody">
             <div class="content">
                 <form id="logout-form" onsubmit="return false">
+                    <button class="btn btn-primary btn-md" @click="placeSalvo">Place salvoes</button>
                     <button class="btn btn-primary btn-md"> <a href="games.html">Leave game</a></button>
                     <button class="btn btn-primary btn-md" @click="logout">Log out</button>
                 </form>
@@ -68,22 +69,26 @@
                     </tbody>
                 </table>
             </div>
-            
-            <div v-if="ships.length == 0">
-                <button class="btn btn-primary btn-md" @click="placeShips()">placeShips</button>
-                <div class="locateShips" @drop="drop_handler" @dragover="dragover_handler">
-                    <div class="AircraftCarrier" data-size="5" data-pos="horizontal" id="AircraftCarrier" draggable="true"
-                        @dragstart="dragstart_handler" @dragend="dragend_handler"><button class="rotar" @click="rotate(AircraftCarrier)"></button></div>
-                    <div class="Submarine" data-size="3" data-pos="horizontal" id="Submarine" draggable="true"
-                        @dragstart="dragstart_handler" @dragend="dragend_handler"><button class="rotar" @click="rotate(Submarine)"></button></div>
-                    <div class="Battleship" data-size="4" data-pos="horizontal" id="Battleship" draggable="true"
-                        @dragstart="dragstart_handler" @dragend="dragend_handler"><button class="rotar" @click="rotate(Battleship)"></button></div>
-                    <div class="Destroyer" data-size="3" data-pos="horizontal" id="Destroyer" draggable="true"
-                        @dragstart="dragstart_handler" @dragend="dragend_handler"><button class="rotar" @click="rotate(Destroyer)"></button></div>
-                    <div class="PatrolBoat" data-size="2" data-pos="horizontal" id="PatrolBoat" draggable="true"
-                        @dragstart="dragstart_handler" @dragend="dragend_handler"><button class="rotar" @click="rotate(PatrolBoat)"></button></div>
-                </div>
+
+            <div class="container" v-if="ships.length == 0">
                 <div>
+                    <button class="btn btn-primary btn-md" @click="placeShips()">placeShips</button>
+                    <!-- <div class="locateShips" @drop="drop_handler" @dragover="dragover_handler"> -->
+
+                        <div class="AircraftCarrier" data-size="5" data-pos="horizontal" id="AircraftCarrier" draggable="true"
+                            @dragstart="dragstart_handler" @dragend="dragend_handler"><button class="rotar" @click="rotate(AircraftCarrier)"></button></div>
+
+                        <div class="Submarine" data-size="3" data-pos="horizontal" id="Submarine" draggable="true"
+                            @dragstart="dragstart_handler" @dragend="dragend_handler"><button class="rotar" @click="rotate(Submarine)"></button></div>
+                        <div class="Battleship" data-size="4" data-pos="horizontal" id="Battleship" draggable="true"
+                            @dragstart="dragstart_handler" @dragend="dragend_handler"><button class="rotar" @click="rotate(Battleship)"></button></div>
+                        <div class="Destroyer" data-size="3" data-pos="horizontal" id="Destroyer" draggable="true"
+                            @dragstart="dragstart_handler" @dragend="dragend_handler"><button class="rotar" @click="rotate(Destroyer)"></button></div>
+                        <div class="PatrolBoat" data-size="2" data-pos="horizontal" id="PatrolBoat" draggable="true"
+                            @dragstart="dragstart_handler" @dragend="dragend_handler"><button class="rotar" @click="rotate(PatrolBoat)"></button></div>
+                    </div>
+                    <!-- </div> -->
+                    
         </main>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>

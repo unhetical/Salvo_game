@@ -46,7 +46,11 @@ var app = new Vue({
                 shipName: "AircraftCarrier",
                 locations: []
             }
-        ]
+        ],
+        salvosLocation: [{
+            Turn: " ",
+            Locations: []
+        }]
     },
 
     methods: {
@@ -122,6 +126,33 @@ var app = new Vue({
                 });
         },
 
+        placeSalvo: function () {
+            var salvosLocations = this.salvosLocation;
+            console.log(salvosLocations);
+            fetch("/api/games/players/" + this.parsedUrl.searchParams.get("gp") + "/salvoes", {
+                    credentials: 'include',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    method: 'POST',
+                    body: JSON.stringify(salvosLocations)
+                }).then(function (response) {
+                    console.log(response);
+                    if (response.ok) {
+                        location.reload();
+                        return response.json();
+                    } else {
+                        alert(response.status)
+                    }
+                }).then(function (data) {
+                    console.log("placesalvoes", data);
+                })
+                .catch(function (error) {
+                    console.log('Request failure: ', error);
+                });
+        },
+
         local: function () {
             for (let x = 0; x < this.gamePlayer.length; x++) {
                 if (this.gamePlayer[x].id == this.parsedUrl.searchParams.get("gp")) {
@@ -141,12 +172,13 @@ var app = new Vue({
             for (let i = 0; i < this.games.Ships.length; i++) {
                 for (let j = 0; j < this.games.Ships[i].location.length; j++) {
                     this.positionShip = this.games.Ships[i].location[j];
-                    var barco = document.getElementById(this.positionShip);
-                    barco.classList.remove("cells");
-                    barco.classList.add("barco");
-                    console.log(this.positionShip);
-                    console.log(barco);
-
+                    var barcoPos = document.getElementById(this.positionShip);
+                    var nameBarco = this.games.Ships[i].shipName;
+                    var idBarco = document.getElementById(nameBarco);
+                    console.log(idBarco);
+                    console.log(barcoPos);
+                    barcoPos.classList.add(nameBarco);
+                    barcoPos.classList.add("barcos");
                 }
             }
         },
@@ -158,19 +190,29 @@ var app = new Vue({
                     for (var i = 0; i < this.positionSalvo.length; i++) {
                         if (key == this.parsedUrl.searchParams.get("gp")) {
                             this.tiroCurrent = document.getElementById(this.positionSalvo[i]);
-                            this.tiroCurrent.classList.remove('cells');
-                            this.tiroCurrent.classList.add('shoot');
-                            this.tiroCurrent.textContent = key1;
-                        };
-                        if (key != this.parsedUrl.searchParams.get("gp")) {
-                            this.tiroOppo = document.getElementById(this.positionSalvo[i]);
-                            if (this.tiroOppo.classList[0] == 'barco') {
-                                this.tiroOppo.classList.remove('barco');
-                                this.tiroOppo.classList.add('shoot');
+                            if (this.tiroCurrent.className.includes("barcos")) {
+                                this.tiroCurrent.classList.add('shoot');
+                                this.tiroCurrent.textContent = key1;
+                            } else {
+                                this.tiroCurrent.classList.add('water');
+                                this.tiroCurrent.textContent = key1;
+                            }
+                        }
+                        else {
+                            this.tiroOppo = document.getElementById(2 + this.positionSalvo[i]);
+                            console.log(this.tiroOppo);
+                            if (this.tiroOppo.classList == "barcos") {
+                                this.tiroOppo.classList.remove("barcos");
+                                this.tiroOppo.classList.remove(this.tiroOppo.id);
+                                this.tiroOppo.classList.add('water');
+                                this.tiroOppo.textContent = key1;
+                            } else {
+                                this.tiroOppo.classList.remove(this.tiroOppo.id);
+                                this.tiroOppo.classList.add('water');
                                 this.tiroOppo.textContent = key1;
                             }
 
-                        };
+                        }
 
                     }
                 }
@@ -241,9 +283,6 @@ var app = new Vue({
                 this.positions = [];
                 return false;
             }
-            console.log("data-pos", this.shipPosi);
-            console.log("shipLocation", this.shipLocation);
-            console.log("position", this.positions);
         },
 
         drop_handler: function (ev) {
