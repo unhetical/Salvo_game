@@ -21,7 +21,11 @@ var app = new Vue({
         letters: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"],
         numeros: [null, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
         parsedUrl: null,
-        idShip: null,
+        shipSizes: null,
+        shipPosi: null,
+        shipElement: null,
+        placedShip: null,
+        finalPos: [],
         shipLocation: [{
                 shipName: "Battleship",
                 locations: []
@@ -104,14 +108,14 @@ var app = new Vue({
                     body: JSON.stringify(shipLocation)
                 }).then(function (response) {
                     console.log(response);
-                    return response.json();
-                    // if (response.ok) {
-                    //     return response.json();
-                    // } else {
-                    //     alert(response.status)
-                    // }
+                    if (response.ok) {
+                        location.reload();
+                        return response.json();
+                    } else {
+                        alert(response.status)
+                    }
                 }).then(function (data) {
-                    console.log("placeships", data.Error);
+                    console.log("placeships", data);
                 })
                 .catch(function (error) {
                     console.log('Request failure: ', error);
@@ -137,9 +141,12 @@ var app = new Vue({
             for (let i = 0; i < this.games.Ships.length; i++) {
                 for (let j = 0; j < this.games.Ships[i].location.length; j++) {
                     this.positionShip = this.games.Ships[i].location[j];
-                    this.barcos = document.getElementById(this.positionShip);
-                    this.barcos.classList.remove('cells');
-                    this.barcos.classList.add('barco');
+                    var barco = document.getElementById(this.positionShip);
+                    barco.classList.remove("cells");
+                    barco.classList.add("barco");
+                    console.log(this.positionShip);
+                    console.log(barco);
+
                 }
             }
         },
@@ -151,8 +158,6 @@ var app = new Vue({
                     for (var i = 0; i < this.positionSalvo.length; i++) {
                         if (key == this.parsedUrl.searchParams.get("gp")) {
                             this.tiroCurrent = document.getElementById(this.positionSalvo[i]);
-                            console.log(this.tiroCurrent);
-                            console.log(2 + this.positionSalvo[i])
                             this.tiroCurrent.classList.remove('cells');
                             this.tiroCurrent.classList.add('shoot');
                             this.tiroCurrent.textContent = key1;
@@ -173,85 +178,119 @@ var app = new Vue({
         },
 
         dragstart_handler: function (ev) {
-            this.idShip = ev.target.id;
-            setTimeout(() => ev.target.className = "invisible", 0);
+            this.shipElement = ev.target;
+            setTimeout(() => this.shipElement.className = "invisible", 0);
         },
 
         dragend_handler: function (ev) {
-            ev.target.className = ev.target.id;
+            if (this.shipPosi == "horizontal") {
+                ev.target.className = ev.target.id;
+            } else {
+                ev.target.className = ev.target.id + "-v";
+            }
         },
 
         dragover_handler: function (ev) {
             ev.preventDefault();
+            this.positions.forEach(pos => {
+                if (!this.exist()) {
+                    document.getElementById(pos).classList.remove("coloredCell");
+                    document.getElementById(pos).classList.add("coloredRedCell");
+                }
+            });
         },
 
         dragenter_handler: function (ev) {
             this.positions = [];
             var celdasP = document.getElementsByClassName("cells");
             for (let i = 0; i < celdasP.length; i++) {
-                celdasP[i].classList.remove("coloredCell");
+                celdasP[i].classList.remove("coloredCell", "coloredRedCell");
             }
-            var selectedCell = document.getElementById(ev.target.id);
-            var shipSize = document.getElementById(this.idShip).getAttribute("data-size");
-            var shipPos = document.getElementById(this.idShip).getAttribute("data-pos");
+            var shipSize = document.getElementById(this.shipElement.id).getAttribute("data-size");
+            this.shipSizes = shipSize;
+            var shipPos = document.getElementById(this.shipElement.id).getAttribute("data-pos");
+            this.shipPosi = shipPos;
+            if (ev.target) {
+                var selectedCell = document.getElementById(ev.target.id);
+            } else {
+                var selectedCell = document.getElementById(ev);
+            }
             var num = +selectedCell.id.slice(1);
             var letra = selectedCell.id.slice(0, 1);
 
-
-            if (shipPos == "horizontal") {
-                for (let i = 0; i < shipSize; i++) {
+            if (this.shipPosi == "horizontal") {
+                for (let i = 0; i < this.shipSizes; i++) {
                     if (num + i < 11) {
                         var idCell = letra + (num + i);
                         var pintar = document.getElementById(idCell);
                         pintar.classList.add("coloredCell");
                         this.positions.push(idCell);
+                    } else {
+                        return false;
                     }
+                }
+            } else if (this.shipPosi == "vertical") {
+                var start = this.letters.indexOf(letra)
+                for (let x = 0; x < this.shipSizes; x++) {
+                    idCell = this.letters[start + x] + num;
+                    var pintar = document.getElementById(idCell);
+                    pintar.classList.add("coloredCell");
+                    this.positions.push(idCell);
                 }
             } else {
-                for (let i = 0; i < shipSize; i++) {
-                    for (let j = 0; j < this.letters.length; j++) {
-                        if (this.letters[j] == letra) {
-                            var idCell = this.letter[j] + num;
-                            var pintar = document.getElementById(idCell);
-                            pintar.classList.add("coloredCell");
-                            this.positions.push(idCell);
-                        }
-                    }
-                }
+                this.positions = [];
+                return false;
             }
-            for (let x = 0; x < this.shipLocation.length; x++) {
-                if (this.shipLocation[x].shipName == this.idShip) {
-                    this.shipLocation[x].locations = [];
-                    this.shipLocation[x].locations = this.positions;
-                }
-            }
-            console.log("positions", this.positions);
+            console.log("data-pos", this.shipPosi);
             console.log("shipLocation", this.shipLocation);
-            //console.log("idShip", this.idShip);
+            console.log("position", this.positions);
         },
 
         drop_handler: function (ev) {
             var celdasP = document.getElementsByClassName("cells");
             for (let i = 0; i < celdasP.length; i++) {
-                celdasP[i].classList.remove("coloredCell");
+                celdasP[i].classList.remove("coloredCell", "coloredRedCell");
             }
-            ev.preventDefault();
-            var ship = document.getElementById(this.idShip);
-            ev.target.appendChild(ship);
+
+            if (ev && this.exist()) {
+                ev.preventDefault();
+                ev.target.appendChild(this.shipElement);
+                for (let x = 0; x < this.shipLocation.length; x++) {
+                    if (this.shipLocation[x].shipName == this.shipElement.id) {
+                        this.shipLocation[x].locations = [];
+                        this.shipLocation[x].locations = this.positions;
+                    }
+                }
+            }
         },
 
-        rotate: function (id) {
-            var size = id.getAttribute("data-size");
-            var dataPos = id.getAttribute("data-pos");
-            if (dataPos == "horizontal") {
-                id.setAttribute("data-pos", "vertical");
-                id.className = id.id + "-v";
-                console.log(id);
-            } else {
-                id.setAttribute("data-pos", "horizontal");
-                id.className = id.id;
-                console.log(id);
+        rotate: function (shipElement) {
+            this.shipElement = shipElement;
+            if (this.shipPosi == "horizontal" && this.exist()) {
+                this.shipElement.setAttribute("data-pos", "vertical");
+                this.shipPosi = "vertical";
+                this.shipElement.className = this.shipElement.id + "-v";
+            } else if (this.shipPosi == "vertical" && this.exist()) {
+                this.shipElement.setAttribute("data-pos", "horizontal");
+                this.shipPosi = "horizontal";
+                this.shipElement.className = this.shipElement.id;
             }
+            this.dragenter_handler(this.shipElement.parentNode.id);
+            this.drop_handler();
+        },
+
+        exist: function () {
+            for (let i = 0; i < this.shipLocation.length; i++) {
+                for (let x = 0; x < this.shipLocation[i].locations.length; x++) {
+                    if (this.shipLocation[i].shipName != this.shipElement.id && this.positions.includes(this.shipLocation[i].locations[x]) ||
+                        this.positions.length != this.shipSizes) {
+                        console.error(false);
+                        return false;
+                    }
+                }
+            }
+            console.error(true);
+            return true;
         }
     },
     created: function () {

@@ -171,11 +171,12 @@ a {
 }
 
 .tables {
-  width: 100%;
-  margin-bottom: 50px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: space-around;
+  width: 100%;
+  margin-bottom: 50px;
 }
 
 .table1 {
@@ -196,10 +197,14 @@ a {
 }
 
 th {
+  width: 40px;
+  height: 40px;
   text-align: center;
 }
 
 td {
+  width: 40px;
+  height: 40px;
   text-align: center;
 }
 
@@ -207,7 +212,6 @@ td {
   border: 2px solid black;
   width: 40px;
   height: 40px;
-  text-align: center;
   padding: 0px;
 }
 
@@ -220,9 +224,7 @@ td {
   border: 2px solid black;
   width: 39px;
   height: 39px;
-  background-image: url("img/pirate_ship.png");
-  background-size: cover;
-  background-position: center;
+  background-color: blue;
 }
 
 .shoot {
@@ -235,10 +237,11 @@ td {
   background-position: center;
 }
 
-.rotar{
+.rotar {
+  display: flex;
   background-color: red;
   border-radius: 50%;
-  width:20px;
+  width: 20px;
   height: 20px;
 }
 
@@ -275,15 +278,28 @@ td {
 .AircraftCarrier-v {
   width: 199px;
   height: 39px;
-  background-image: url(/styles/img/kisspng-warship-freedom-class-littoral-combat-ship-uss-fre-ship-5ac0bd64ad2213.0868376015225808367092\ \(1\).png);
+  background-image: url(/styles/img/kisspng-aircraft-carrier-amphibious-warfare-ship-navy-fast-5ad893c8e440b5.7496318915241430489349.png);
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
   border: 2px dashed yellowgreen;
   cursor: pointer;
-  -ms-transform: rotate(90deg); /* IE 9 */
-  -webkit-transform: rotate(90deg); /* Safari 3-8 */
-  transform: rotate(90deg);
+  -webkit-transform: translateY(-100%) rotate(90deg);
+  /* Safari */
+  -moz-transform: translateY(-100%) rotate(90deg);
+  /* Firefox 3.6 Firefox 4 */
+  /*-moz-transform-origin: right top; */
+  -ms-transform: translateY(-100%) rotate(90deg);
+  /* IE9 */
+  -o-transform: translateY(-100%) rotate(90deg);
+  /* Opera */
+  transform: translateY(-100%) rotate(90deg);
+  /* W3C */
+  -webkit-transform-origin: left bottom;
+  -moz-transform-origin: left bottom;
+  -ms-transform-origin: left bottom;
+  -o-transform-origin: left bottom;
+  transform-origin: left bottom;
 }
 
 .Battleship {
@@ -297,6 +313,33 @@ td {
   cursor: pointer;
 }
 
+.Battleship-v {
+  width: 159px;
+  background-image: url(/styles/img/kisspng-watercraft-cruise-ship-navigation-5a6cd94f55b0c1.918367711517082959351.png);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 39px;
+  border: 2px dashed yellowgreen;
+  cursor: pointer;
+  -webkit-transform: translateY(-100%) rotate(90deg);
+  /* Safari */
+  -moz-transform: translateY(-100%) rotate(90deg);
+  /* Firefox 3.6 Firefox 4 */
+  /*-moz-transform-origin: right top; */
+  -ms-transform: translateY(-100%) rotate(90deg);
+  /* IE9 */
+  -o-transform: translateY(-100%) rotate(90deg);
+  /* Opera */
+  transform: translateY(-100%) rotate(90deg);
+  /* W3C */
+  -webkit-transform-origin: left bottom;
+  -moz-transform-origin: left bottom;
+  -ms-transform-origin: left bottom;
+  -o-transform-origin: left bottom;
+  transform-origin: left bottom;
+}
+
 .Submarine {
   background-position: center;
   background-size: cover;
@@ -306,6 +349,33 @@ td {
   height: 39px;
   border: 2px dashed yellowgreen;
   cursor: pointer;
+}
+
+.Submarine-v {
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url(/styles/img/kisspng-enforcer-amphibious-transport-dock-amphibious-warf-littorioclass-battleship-5b06d0b04fff30.7179860215271732963277.png);
+  width: 119px;
+  height: 39px;
+  border: 2px dashed yellowgreen;
+  cursor: pointer;
+  -webkit-transform: translateY(-100%) rotate(90deg);
+  /* Safari */
+  -moz-transform: translateY(-100%) rotate(90deg);
+  /* Firefox 3.6 Firefox 4 */
+  /*-moz-transform-origin: right top; */
+  -ms-transform: translateY(-100%) rotate(90deg);
+  /* IE9 */
+  -o-transform: translateY(-100%) rotate(90deg);
+  /* Opera */
+  transform: translateY(-100%) rotate(90deg);
+  /* W3C */
+  -webkit-transform-origin: left bottom;
+  -moz-transform-origin: left bottom;
+  -ms-transform-origin: left bottom;
+  -o-transform-origin: left bottom;
+  transform-origin: left bottom;
 }
 
 .Destroyer {
@@ -319,6 +389,33 @@ td {
   cursor: pointer;
 }
 
+.Destroyer-v {
+  background-image: url(/styles/img/kisspng-warship-freedom-class-littoral-combat-ship-uss-fre-ship-5ac0bd64ad2213.0868376015225808367092.png);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 119px;
+  height: 39px;
+  border: 2px dashed yellowgreen;
+  cursor: pointer;
+  -webkit-transform: translateY(-100%) rotate(90deg);
+  /* Safari */
+  -moz-transform: translateY(-100%) rotate(90deg);
+  /* Firefox 3.6 Firefox 4 */
+  /*-moz-transform-origin: right top; */
+  -ms-transform: translateY(-100%) rotate(90deg);
+  /* IE9 */
+  -o-transform: translateY(-100%) rotate(90deg);
+  /* Opera */
+  transform: translateY(-100%) rotate(90deg);
+  /* W3C */
+  -webkit-transform-origin: left bottom;
+  -moz-transform-origin: left bottom;
+  -ms-transform-origin: left bottom;
+  -o-transform-origin: left bottom;
+  transform-origin: left bottom;
+}
+
 .PatrolBoat {
   background-image: url(/styles/img/kisspng-frigate-ship-patrol-boat-drawing-fast-attack-craft-corvette-5ac6d52508bed0.7711393015229801330359.png);
   background-position: center;
@@ -328,6 +425,33 @@ td {
   height: 39px;
   border: 2px dashed yellowgreen;
   cursor: pointer;
+}
+
+.PatrolBoat-v {
+  background-image: url(/styles/img/kisspng-frigate-ship-patrol-boat-drawing-fast-attack-craft-corvette-5ac6d52508bed0.7711393015229801330359.png);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 79px;
+  height: 39px;
+  border: 2px dashed yellowgreen;
+  cursor: pointer;
+  -webkit-transform: translateY(-100%) rotate(90deg);
+  /* Safari */
+  -moz-transform: translateY(-100%) rotate(90deg);
+  /* Firefox 3.6 Firefox 4 */
+  /*-moz-transform-origin: right top; */
+  -ms-transform: translateY(-100%) rotate(90deg);
+  /* IE9 */
+  -o-transform: translateY(-100%) rotate(90deg);
+  /* Opera */
+  transform: translateY(-100%) rotate(90deg);
+  /* W3C */
+  -webkit-transform-origin: left bottom;
+  -moz-transform-origin: left bottom;
+  -ms-transform-origin: left bottom;
+  -o-transform-origin: left bottom;
+  transform-origin: left bottom;
 }
 
 /*-------DRAG AND DROP------*/
@@ -343,4 +467,13 @@ td {
   text-align: center;
   padding: 0px;
   background-color: rgb(73, 226, 43);
+}
+
+.coloredRedCell {
+  border: 2px solid black;
+  width: 39px;
+  height: 39px;
+  text-align: center;
+  padding: 0px;
+  background-color: rgb(228, 15, 15);
 }

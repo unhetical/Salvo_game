@@ -42,7 +42,8 @@
                     <button class="btn btn-primary btn-md" @click="logout">Log out</button>
                 </form>
             </div>
-            <div v-if="ships.length != 0" class="tables">
+
+            <div class="tables">
                 <table class="table1">
                     <thead>
                         <th class="th" v-for="value in numeros">{{value}}</th>
@@ -50,7 +51,8 @@
                     <tbody>
                         <tr class="tr" v-for="letter in letters">
                             <td class="cells letras">{{letter}}</td>
-                            <td class="cells" v-for="i in 10" v-bind:id="letter+i"></td>
+                            <td class="cells" v-for="i in 10" v-bind:id="letter+i" @drop="drop_handler" @dragover="dragover_handler"
+                                @dragenter="dragenter_handler"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -66,35 +68,22 @@
                     </tbody>
                 </table>
             </div>
-            <div v-else>
-                <table class="table1">
-                    <thead>
-                        <th class="th" v-for="value in numeros">{{value}}</th>
-                    </thead>
-                    <tbody>
-                        <tr class="tr" v-for="letter in letters">
-                            <td class="cells letras">{{letter}}</td>
-                            <td class="cells" v-for="i in 10" v-bind:id="letter+i" @drop="drop_handler" @dragover="dragover_handler"
-                                @dragenter="dragenter_handler"></td>
-                        </tr>
-                    </tbody>
-                </table>
-
+            
+            <div v-if="ships.length == 0">
                 <button class="btn btn-primary btn-md" @click="placeShips()">placeShips</button>
                 <div class="locateShips" @drop="drop_handler" @dragover="dragover_handler">
                     <div class="AircraftCarrier" data-size="5" data-pos="horizontal" id="AircraftCarrier" draggable="true"
                         @dragstart="dragstart_handler" @dragend="dragend_handler"><button class="rotar" @click="rotate(AircraftCarrier)"></button></div>
-
                     <div class="Submarine" data-size="3" data-pos="horizontal" id="Submarine" draggable="true"
-                        @dragstart="dragstart_handler" @dragend="dragend_handler"></div>
+                        @dragstart="dragstart_handler" @dragend="dragend_handler"><button class="rotar" @click="rotate(Submarine)"></button></div>
                     <div class="Battleship" data-size="4" data-pos="horizontal" id="Battleship" draggable="true"
-                        @dragstart="dragstart_handler" @dragend="dragend_handler"></div>
+                        @dragstart="dragstart_handler" @dragend="dragend_handler"><button class="rotar" @click="rotate(Battleship)"></button></div>
                     <div class="Destroyer" data-size="3" data-pos="horizontal" id="Destroyer" draggable="true"
-                        @dragstart="dragstart_handler" @dragend="dragend_handler"></div>
+                        @dragstart="dragstart_handler" @dragend="dragend_handler"><button class="rotar" @click="rotate(Destroyer)"></button></div>
                     <div class="PatrolBoat" data-size="2" data-pos="horizontal" id="PatrolBoat" draggable="true"
-                        @dragstart="dragstart_handler" @dragend="dragend_handler"></div>
+                        @dragstart="dragstart_handler" @dragend="dragend_handler"><button class="rotar" @click="rotate(PatrolBoat)"></button></div>
                 </div>
-            </div>
+                <div>
         </main>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
