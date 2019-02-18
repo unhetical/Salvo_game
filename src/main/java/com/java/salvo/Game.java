@@ -45,4 +45,6 @@ public class Game {
     public void setGamePlayerSet(Set<GamePlayer> gamePlayerSet) {
         this.gamePlayerSet = gamePlayerSet;
     }
+
+
 }

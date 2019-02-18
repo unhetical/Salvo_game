@@ -27,7 +27,7 @@
   justify-items: center;
   align-items: center;
   width: 100%;
-  height: 150px;
+  height: 140px;
   color: white;
 }
 
@@ -45,11 +45,12 @@
   justify-content: center;
   align-content: center;
   align-items: center;
-  background-color: black;
+  background-color: rgb(77, 77, 77);
+  opacity: 0.9;
   font-family: arcade;
   padding: 5px;
   color: yellow;
-  border: 2px dotted white;
+  border: 2px solid black;
 }
 
 .marcador {
@@ -66,8 +67,9 @@
   align-items: center;
   width: 100%;
   height: 120px;
-  background-color: black;
-  border: 2px dotted white;
+  background-color: rgb(77, 77, 77);
+  opacity: 0.9;
+  border: 2px solid black;
 }
 
 .scores>h4 {
@@ -90,6 +92,14 @@
 
 /*-----------BODY--------*/
 /*-------LOGIN------*/
+form{
+  width: 100%;
+}
+
+#logout-form{
+width: 100%;
+}
+
 .log {
   display: flex;
   flex-direction: row;
@@ -103,7 +113,7 @@ input {
 }
 
 button {
-  background-color: darkblue;
+  background-color: black;
   color: white;
 }
 
@@ -112,10 +122,16 @@ a {
 }
 
 .textBlack {
+  text-align: center;
+  padding: 0px;
+  margin: 0px;
+  width: 100%;
   color: black;
 }
 
 .body-games {
+  width: 100%;
+  padding: 10px;
   background-image: url("img/fondo.png");
   background-size: cover;
   background-position: center;
@@ -123,7 +139,7 @@ a {
 }
 
 .body-game {
-  background-image: url("img/fondo.png");
+  background-image: url("img/fondoOscuro.jpg");
   background-size: cover;
   background-position: center;
   color: white;
@@ -143,6 +159,7 @@ a {
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: space-around;
 }
 
 .content {
@@ -161,6 +178,28 @@ a {
   width: 65%;
 }
 
+.middle{
+  border: 2px solid black;
+  background-color: rgb(77, 77, 77);
+  opacity: 0.9;
+  width: 180px;
+  height: 440px;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+}
+
+.center {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
 /*-----TABLES------*/
 
 .table-bordered {
@@ -168,7 +207,7 @@ a {
   height: 200px;
   color: white;
   background-color: black;
-  opacity: 0.6;
+  opacity: 0.7;
 }
 
 .tables {
@@ -182,7 +221,7 @@ a {
 .table1 {
   background-image: url(https://media.giphy.com/media/VuehuL4fMHLgs/giphy.gif);
   background-position: center;
-  background-size: cover;
+  background-size: 800px;
   background-repeat: no-repeat;
   table-layout: fixed;
   border: 2px solid black;
@@ -192,6 +231,7 @@ a {
 
 .th {
   background-color: rgb(77, 77, 77);
+  opacity: 0.9;
   border: 2px solid black;
   width: 40px;
   height: 40px;
@@ -219,10 +259,21 @@ td {
 
 .letras {
   background-color: rgb(77, 77, 77);
+  opacity: 0.9;
   padding: 0px;
 }
 
+.destroyed {
+  text-decoration-line: line-through;
+  color: red;
+}
+
+.barcos{
+  background-color: steelblue;
+}
+
 .water {
+  position: relative;
   text-align: center;
   border: 2px solid black;
   width: 39px;
@@ -231,8 +282,6 @@ td {
   background-size: contain;
   background-position: center;
 }
-
-
 
 .rotar {
   display: flex;
@@ -246,7 +295,7 @@ td {
 .list-group {
   width: 50%;
   background-color: black;
-  opacity: 0.6;
+  opacity: 0.7;
 }
 
 .list-group-item {
@@ -257,16 +306,12 @@ td {
 
 /*---------SHIPS---------*/
 
-.locateShips {
-  width: 50%;
-}
-
 .AircraftCarrier {
   width: 199px;
   height: 39px;
   background-image: url(/styles/img/barco1.png);
   background-position: center;
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
   border: 2px dashed yellowgreen;
   cursor: pointer;
@@ -277,7 +322,7 @@ td {
   height: 39px;
   background-image: url(/styles/img/barco1.png);
   background-position: center;
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
   border: 2px dashed yellowgreen;
   cursor: pointer;
@@ -303,7 +348,7 @@ td {
   width: 159px;
   background-image: url(/styles/img/barco2.png);
   background-position: center;
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
   height: 39px;
   border: 2px dashed yellowgreen;
@@ -314,7 +359,7 @@ td {
   width: 159px;
   background-image: url(/styles/img/barco2.png);
   background-position: center;
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
   height: 39px;
   border: 2px dashed yellowgreen;
@@ -339,7 +384,7 @@ td {
 
 .Submarine {
   background-position: center;
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
   background-image: url(/styles/img/barco3.png);
   width: 119px;
@@ -350,7 +395,7 @@ td {
 
 .Submarine-v {
   background-position: center;
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
   background-image: url(/styles/img/barco3.png);
   width: 119px;
@@ -378,7 +423,7 @@ td {
 .Destroyer {
   background-image: url(/styles/img/barco4.png);
   background-position: center;
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
   width: 119px;
   height: 39px;
@@ -389,7 +434,7 @@ td {
 .Destroyer-v {
   background-image: url(/styles/img/barco4.png);
   background-position: center;
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
   width: 119px;
   height: 39px;
@@ -416,7 +461,7 @@ td {
 .PatrolBoat {
   background-image: url(/styles/img/barco5-correcccion.png);
   background-position: center;
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
   width: 79px;
   height: 39px;
@@ -427,7 +472,7 @@ td {
 .PatrolBoat-v {
   background-image: url(/styles/img/barco5-correcccion.png);
   background-position: center;
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
   width: 79px;
   height: 39px;
@@ -449,16 +494,6 @@ td {
   -ms-transform-origin: left bottom;
   -o-transform-origin: left bottom;
   transform-origin: left bottom;
-}
-
-.shoot {
-  text-align: center;
-  border: 2px solid black;
-  width: 39px;
-  height: 39px;
-  background-image: url(https://media.giphy.com/media/FnatKdwxRxpVC/giphy.gif);
-  background-size: cover;
-  background-position: center;
 }
 
 /*-------DRAG AND DROP------*/
@@ -483,4 +518,26 @@ td {
   text-align: center;
   padding: 0px;
   background-color: rgb(228, 15, 15);
+}
+
+.bomb {
+  width: 39px;
+  height: 39px;
+  border-radius: 50%;
+  background-image: url(img/bomba1.png);
+  background-position: center;
+  background-size: cover;
+}
+
+.shoot {
+  width: 39px;
+  height: 39px;
+  background-image: url(https://media.giphy.com/media/FnatKdwxRxpVC/giphy.gif);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.url {
+  cursor: crosshair;
 }

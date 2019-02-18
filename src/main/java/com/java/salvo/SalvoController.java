@@ -7,7 +7,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
-import java.util.stream.Collectors;
+import static java.util.stream.Collectors.toList;
 
 
 @RestController
@@ -52,7 +52,7 @@ public class SalvoController {
                 .findAll()
                 .stream()
                 .map(game -> gameDTO(game))
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     private Map<String, Object> gameDTO(Game game) {
@@ -61,12 +61,12 @@ public class SalvoController {
         dto.put("date", game.getDate());
         dto.put("gamePlayers", game.getGamePlayerSet()
                 .stream().map(gamePlayer -> gamePlayerDTO(gamePlayer))
-                .collect(Collectors.toList()));
+                .collect(toList()));
         dto.put("leaderboard", playerRepository
                 .findAll()
                 .stream()
                 .map(player -> playersDTO(player))
-                .collect(Collectors.toList()));
+                .collect(toList()));
         return dto;
     }
 
@@ -90,29 +90,91 @@ public class SalvoController {
         return dto;
     }
 
+    /*--------------------------------------------------------------------------------------------*/
     @RequestMapping("/game_view/{id}")
     public ResponseEntity<Object> gameDTOId(@PathVariable Long id, Authentication authentication) {
-        GamePlayer current = gamePlayerRepository.getOne(id);
+        GamePlayer currentGp = gamePlayerRepository.getOne(id);
         Player logged = playerRepository.findByEmail(authentication.getName());
+        Set<GamePlayer> gamePlayerSet = currentGp.getGame().getGamePlayerSet();
 
-        if (current.getPlayer().getId().equals(logged.getId())) {
-            Map<String, Object> dto = gameDTO(current.getGame());
-            dto.put("gameplayers", current.getShipSet().stream().map(ship -> shipsDTO(ship))
-                    .collect(Collectors.toList()));
-            dto.put("Ships", current.getShipSet().stream().map(ship -> shipsDTO(ship))
-                    .collect(Collectors.toList()));
-            Set<GamePlayer> gamePlayerSet = current.getGame().getGamePlayerSet();
+        if (currentGp.getPlayer().getId().equals(logged.getId())) {
+            Map<String, Object> dto = gameDTO(currentGp.getGame());
+            dto.put("Ships", currentGp.getShipSet()
+                    .stream()
+                    .map(ship -> shipsDTO(ship))
+                    .collect(toList()));
             dto.put("Salvos", createSalvosDTO(gamePlayerSet));
+            dto.put("ShipSize", ShipHitsDto());
+            dto.put("Hits", HittedDto(currentGp));
+
             return new ResponseEntity<>(dto, HttpStatus.ACCEPTED);
         }
         return new ResponseEntity<>(makeMap("ERROR", "Return back CHEATER!"), HttpStatus.UNAUTHORIZED);
     }
+
+    /*-----------METHOD GET SHIP SIZES AND SHIPNAME--------------*/
+    private Map<String,Integer> ShipHitsDto(){
+        Map<String,Integer> dto = new HashMap<String,Integer>();
+        dto.put("PatrolBoat", 2);
+        dto.put("Destroyer", 3);
+        dto.put("Submarine", 3);
+        dto.put("Battleship", 4);
+        dto.put("AircraftCarrier", 5);
+        dto.put("AllShips", 5);
+
+        return dto;
+    }
+
+    /*-----------METHOD GET SHIPS OPPONENT HITTED BY CURRENT--------------*/
+    private Map<String, Object> HittedDto (GamePlayer currentGp) {
+        Map<String, Object> dto = new HashMap<String, Object>();
+        GamePlayer oppGamePlayer = opponentGpDTO(currentGp);
+
+            Set<Ship> oppGpShipSet = oppGamePlayer.getShipSet();
+            Set<Salvo> currentGpSalvoSet = currentGp.getSalvoSet();
+
+            List<String> salvoCurrLoc = currentGpSalvoSet
+                    .stream()
+                    .map(salvo -> salvo.getLocations())
+                    .flatMap(s -> s.stream())
+                    .collect(toList());
+        System.out.println("salvo"+salvoCurrLoc);
+
+            List<String> OppShips = oppGpShipSet
+                    .stream()
+                    .map(ship -> ship.getLocations()).flatMap(sh -> sh.stream())
+                    .collect(toList());
+        System.out.println(("oppShips"+OppShips));
+
+            List<String> hits = OppShips.stream().filter(s -> salvoCurrLoc.contains(s)).collect(toList());
+        System.out.println("hitlist"+hits);
+
+            for (Ship ship : oppGpShipSet) {
+                for (String hit: hits) {
+                    if (ship.getLocations().contains(hit)) {
+                        dto.put(hit, ship.getShipName());
+                    }
+                }
+            }
+
+        return dto;
+    }
+
+/*-----------METHOD GET OPPONENT GAMEPLAYER--------------*/
+    private GamePlayer opponentGpDTO(GamePlayer gamePlayer) {
+        return  gamePlayer.getGame().getGamePlayerSet()
+                .stream()
+                .filter(gp -> !gp.getId().equals(gamePlayer))
+                .findFirst().orElse(null);
+    }
+    /*---------------------------------------------------------------------------------------------------*/
 
     private Map<String, Object> shipsDTO(Ship ship) {
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("id", ship.getId());
         dto.put("shipName", ship.getShipName());
         dto.put("location", ship.getLocations());
+
         return dto;
     }
 
@@ -138,7 +200,7 @@ public class SalvoController {
         dto.put("email", player.getEmail());
         dto.put("gamePlayers", player.getGamePlayerSet()
                 .stream().map(gamePlayer -> gamePlayersDTO(gamePlayer))
-                .collect(Collectors.toList()));
+                .collect(toList()));
         return dto;
     }
 
@@ -184,7 +246,7 @@ public class SalvoController {
     }
 
         @RequestMapping(path="/games/players/{gamePlayerId}/ships", method=RequestMethod.POST)
-        public ResponseEntity<Object> createShips(@PathVariable Long gamePlayerId,
+        public ResponseEntity<Object> createShipset(@PathVariable Long gamePlayerId,
         Authentication authentication, @RequestBody Set<Ship> shipSet) {
             Player currentPlayer = playerRepository.findByEmail(authentication.getName());
             GamePlayer currentGp = gamePlayerRepository.getOne(gamePlayerId);
@@ -212,7 +274,7 @@ public class SalvoController {
 
     @RequestMapping(path="/games/players/{gamePlayerId}/salvoes", method=RequestMethod.POST)
     public ResponseEntity<Object> createSalvoes(@PathVariable Long gamePlayerId,
-                                              Authentication authentication, @RequestBody Set<Salvo> salvoSet) {
+                                              Authentication authentication, @RequestBody Salvo salvo) {
         Player currentPlayer = playerRepository.findByEmail(authentication.getName());
         GamePlayer currentGp = gamePlayerRepository.getOne(gamePlayerId);
 
@@ -229,13 +291,12 @@ public class SalvoController {
             return new ResponseEntity<>(makeMap("ERROR", "The salvo are placed, max 5")
                     , HttpStatus.FOUND);
         } else {
-            for (Salvo salvo : salvoSet) {
-                salvo.setGamePlayer(currentGp);
-                salvoRepository.save(salvo);
+            salvo.setTurn(currentGp.getSalvoSet().size()+1);
+            currentGp.addSalvo(salvo);
+            salvoRepository.save(salvo);
             }
             return new ResponseEntity<>(makeMap("ok", "Created"), HttpStatus.CREATED);
         }
-    }
 
     @RequestMapping(path = "/players", method = RequestMethod.POST)
     public ResponseEntity<Object> register(
@@ -257,4 +318,5 @@ public class SalvoController {
         map.put(key, value);
         return map;
     }
+
 }

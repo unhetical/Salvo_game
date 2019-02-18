@@ -3,30 +3,28 @@ var app = new Vue({
     data: {
         games: [],
         ships: [],
-        barcos: [],
-        tiroCurrent: [],
-        tiroOppo: [],
+        shipLives: [],
+        hits: [],
+        tiro: [],
         salvos: [],
         positions: [],
-        salvosCurrent: [],
-        salvosOppo: [],
         gamePlayer: [],
         currentPlayer: [],
         currentScore: [],
         opponentScore: [],
         opponentPlayer: [],
         positionShip: [],
+        positionShip2: [],
         positionSalvo: [],
-        turn: [],
         letters: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"],
         numeros: [null, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
         parsedUrl: null,
         shipSizes: null,
         shipPosi: null,
         shipElement: null,
-        placedShip: null,
-        finalPos: [],
-        shipLocation: [{
+        bombs: 5,
+        bombPos: [],
+        shipList: [{
                 shipName: "Battleship",
                 locations: []
             },
@@ -47,10 +45,10 @@ var app = new Vue({
                 locations: []
             }
         ],
-        salvosLocation: [{
-            Turn: " ",
-            Locations: []
-        }]
+        salvosList: {
+            turn: null,
+            locations: []
+        }
     },
 
     methods: {
@@ -66,19 +64,23 @@ var app = new Vue({
                     alert("Unauthorized, return back CHEATER");
                 }).then(function (myData) {
                     app.games = myData;
-                    //console.log("games", app.games);
+                    console.log("games", app.games);
                     app.ships = myData.Ships;
-                    console.log("ships Current player", app.ships);
+                    // console.log("ships Current player", app.ships);
                     app.salvos = myData.Salvos;
                     console.log("salvos", app.salvos);
+                    app.shipLives = myData.ShipSize;
+                    // console.log("shipSizes", app.shipLives);
+                    app.hits = myData.Hits;
+                    console.log("hits", app.hits);
                     app.ocupado();
-                    app.tiros();
-                    console.log("salvosCurrent", app.salvosCurrent);
                     app.gamePlayer = myData.gamePlayers;
-                    console.log("gamePlayer", app.gamePlayer);
+                    // console.log("gamePlayer", app.gamePlayer);
                     app.local();
-                    console.log("currentPlayer", app.currentPlayer);
-                    console.log("opponentPlayer", app.opponentPlayer);
+                    // console.log("currentPlayer", app.currentPlayer);
+                    // console.log("opponentPlayer", app.opponentPlayer);
+                    app.tirosOppo();
+                    app.tirosCurrent();
                 })
         },
 
@@ -100,8 +102,7 @@ var app = new Vue({
         },
 
         placeShips: function () {
-            var shipLocation = this.shipLocation;
-            console.log(shipLocation);
+            var shipList = this.shipList;
             fetch("/api/games/players/" + this.parsedUrl.searchParams.get("gp") + "/ships", {
                     credentials: 'include',
                     headers: {
@@ -109,7 +110,7 @@ var app = new Vue({
                         'Content-Type': 'application/json'
                     },
                     method: 'POST',
-                    body: JSON.stringify(shipLocation)
+                    body: JSON.stringify(shipList)
                 }).then(function (response) {
                     console.log(response);
                     if (response.ok) {
@@ -127,30 +128,31 @@ var app = new Vue({
         },
 
         placeSalvo: function () {
-            var salvosLocations = this.salvosLocation;
-            console.log(salvosLocations);
-            fetch("/api/games/players/" + this.parsedUrl.searchParams.get("gp") + "/salvoes", {
-                    credentials: 'include',
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    method: 'POST',
-                    body: JSON.stringify(salvosLocations)
-                }).then(function (response) {
-                    console.log(response);
-                    if (response.ok) {
-                        location.reload();
-                        return response.json();
-                    } else {
-                        alert(response.status)
-                    }
-                }).then(function (data) {
-                    console.log("placesalvoes", data);
-                })
-                .catch(function (error) {
-                    console.log('Request failure: ', error);
-                });
+            var salvosList = this.salvosList;
+            if (salvosList.locations.length == 5) {
+                fetch("/api/games/players/" + this.parsedUrl.searchParams.get("gp") + "/salvoes", {
+                        credentials: 'include',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        method: 'POST',
+                        body: JSON.stringify(salvosList)
+                    }).then(function (response) {
+                        console.log(response);
+                        if (response.ok) {
+                            location.reload();
+                            return response.json();
+                        } else {
+                            alert(response.status)
+                        }
+                    }).then(function (data) {
+                        console.log("placesalvoes", data);
+                    })
+                    .catch(function (error) {
+                        console.log('Request failure: ', error);
+                    });
+            }
         },
 
         local: function () {
@@ -171,49 +173,68 @@ var app = new Vue({
         ocupado: function () {
             for (let i = 0; i < this.games.Ships.length; i++) {
                 for (let j = 0; j < this.games.Ships[i].location.length; j++) {
-                    this.positionShip = this.games.Ships[i].location[j];
-                    var barcoPos = document.getElementById(this.positionShip);
+                    this.positionShip = this.games.Ships[i].location[0];
+                    this.positionShip2 = this.games.Ships[i].location[j];
+                    var barcoReal = document.getElementById(this.positionShip);
+                    var barcoPos = document.getElementById(this.positionShip2);
                     var nameBarco = this.games.Ships[i].shipName;
-                    var idBarco = document.getElementById(nameBarco);
-                    console.log(idBarco);
-                    console.log(barcoPos);
-                    barcoPos.classList.add(nameBarco);
+                    barcoReal.classList.add("barcos");
                     barcoPos.classList.add("barcos");
+
+                    var num1 = this.positionShip.slice(1);
+                    var num2 = this.positionShip2.slice(1);
+                    if (num1 == num2) {
+                        barcoReal.style.position = "absolute";
+                        barcoReal.classList.add(nameBarco + "-v");
+                    } else {
+                        barcoReal.style.position = "absolute";
+                        barcoReal.classList.remove(nameBarco + "-v");
+                        barcoReal.classList.add(nameBarco);
+                    }
                 }
             }
         },
 
-        tiros: function () {
+        tirosOppo: function () {
             for (let key in this.salvos) {
                 for (let key1 in this.salvos[key]) {
                     this.positionSalvo = this.salvos[key][key1];
+
                     for (var i = 0; i < this.positionSalvo.length; i++) {
+                        if (key != this.parsedUrl.searchParams.get("gp")) {
+                            this.tiro = document.getElementById(this.positionSalvo[i]);
+
+                            if (this.tiro.className.includes("barcos")) {
+                                this.tiro.classList.add('shoot');
+                                this.tiro.textContent = key1;
+                            } else {
+                                this.tiro.classList.add('water');
+                                this.tiro.textContent = key1;
+                            }
+                        }
                         if (key == this.parsedUrl.searchParams.get("gp")) {
-                            this.tiroCurrent = document.getElementById(this.positionSalvo[i]);
-                            if (this.tiroCurrent.className.includes("barcos")) {
-                                this.tiroCurrent.classList.add('shoot');
-                                this.tiroCurrent.textContent = key1;
+                            this.tiro = document.getElementById(2 + this.positionSalvo[i]);
+                            if (!this.tiro.className.includes("shoot")) {
+                                this.tiro.classList.add('water');
+                                this.tiro.textContent = key1;
                             } else {
-                                this.tiroCurrent.classList.add('water');
-                                this.tiroCurrent.textContent = key1;
+                                this.tiro.textContent = key1;
                             }
                         }
-                        else {
-                            this.tiroOppo = document.getElementById(2 + this.positionSalvo[i]);
-                            console.log(this.tiroOppo);
-                            if (this.tiroOppo.classList == "barcos") {
-                                this.tiroOppo.classList.remove("barcos");
-                                this.tiroOppo.classList.remove(this.tiroOppo.id);
-                                this.tiroOppo.classList.add('water');
-                                this.tiroOppo.textContent = key1;
-                            } else {
-                                this.tiroOppo.classList.remove(this.tiroOppo.id);
-                                this.tiroOppo.classList.add('water');
-                                this.tiroOppo.textContent = key1;
-                            }
+                    }
+                }
+            }
+        },
 
-                        }
-
+        tirosCurrent: function () {
+            for (let key in this.hits) {
+                var celdaOppo = document.getElementById(2 + key);
+                celdaOppo.classList.remove("water");
+                celdaOppo.classList.add("shoot");
+                for (let key2 in this.shipLives) {
+                    if (this.hits[key] == key2) {
+                        this.shipLives[key2] -= 1;
+                    } else if (this.shipLives[key2] == 0) {
                     }
                 }
             }
@@ -234,8 +255,9 @@ var app = new Vue({
 
         dragover_handler: function (ev) {
             ev.preventDefault();
+            console.log(this.positions);
             this.positions.forEach(pos => {
-                if (!this.exist()) {
+                if (!this.exist() || !this.compareSize()) {
                     document.getElementById(pos).classList.remove("coloredCell");
                     document.getElementById(pos).classList.add("coloredRedCell");
                 }
@@ -245,6 +267,7 @@ var app = new Vue({
         dragenter_handler: function (ev) {
             this.positions = [];
             var celdasP = document.getElementsByClassName("cells");
+
             for (let i = 0; i < celdasP.length; i++) {
                 celdasP[i].classList.remove("coloredCell", "coloredRedCell");
             }
@@ -252,6 +275,7 @@ var app = new Vue({
             this.shipSizes = shipSize;
             var shipPos = document.getElementById(this.shipElement.id).getAttribute("data-pos");
             this.shipPosi = shipPos;
+
             if (ev.target) {
                 var selectedCell = document.getElementById(ev.target.id);
             } else {
@@ -271,6 +295,7 @@ var app = new Vue({
                         return false;
                     }
                 }
+
             } else if (this.shipPosi == "vertical") {
                 var start = this.letters.indexOf(letra)
                 for (let x = 0; x < this.shipSizes; x++) {
@@ -291,13 +316,14 @@ var app = new Vue({
                 celdasP[i].classList.remove("coloredCell", "coloredRedCell");
             }
 
-            if (ev && this.exist()) {
+            if (ev && this.compareSize() && this.exist()) {
                 ev.preventDefault();
                 ev.target.appendChild(this.shipElement);
-                for (let x = 0; x < this.shipLocation.length; x++) {
-                    if (this.shipLocation[x].shipName == this.shipElement.id) {
-                        this.shipLocation[x].locations = [];
-                        this.shipLocation[x].locations = this.positions;
+                for (let x = 0; x < this.shipList.length; x++) {
+
+                    if (this.shipList[x].shipName == this.shipElement.id) {
+                        this.shipList[x].locations = [];
+                        this.shipList[x].locations = this.positions;
                     }
                 }
             }
@@ -305,24 +331,31 @@ var app = new Vue({
 
         rotate: function (shipElement) {
             this.shipElement = shipElement;
-            if (this.shipPosi == "horizontal" && this.exist()) {
+
+            if (this.shipPosi == "horizontal") {
                 this.shipElement.setAttribute("data-pos", "vertical");
                 this.shipPosi = "vertical";
                 this.shipElement.className = this.shipElement.id + "-v";
-            } else if (this.shipPosi == "vertical" && this.exist()) {
+                console.log(this.shipPosi);
+                this.drop_handler();
+
+            } else if (this.shipPosi == "vertical") {
                 this.shipElement.setAttribute("data-pos", "horizontal");
                 this.shipPosi = "horizontal";
                 this.shipElement.className = this.shipElement.id;
+                console.log(this.shipPosi);
+                this.drop_handler();
+
+            } else {
+                return false
             }
-            this.dragenter_handler(this.shipElement.parentNode.id);
-            this.drop_handler();
+
         },
 
         exist: function () {
-            for (let i = 0; i < this.shipLocation.length; i++) {
-                for (let x = 0; x < this.shipLocation[i].locations.length; x++) {
-                    if (this.shipLocation[i].shipName != this.shipElement.id && this.positions.includes(this.shipLocation[i].locations[x]) ||
-                        this.positions.length != this.shipSizes) {
+            for (let i = 0; i < this.shipList.length; i++) {
+                for (let x = 0; x < this.shipList[i].locations.length; x++) {
+                    if (this.shipList[i].shipName != this.shipElement.id && this.positions.includes(this.shipList[i].locations[x])) {
                         console.error(false);
                         return false;
                     }
@@ -330,7 +363,37 @@ var app = new Vue({
             }
             console.error(true);
             return true;
+        },
+
+        compareSize: function () {
+            var parse = parseInt(this.shipSizes);
+            console.log(parse, this.positions.length);
+            if (this.positions.length != parse) {
+                console.log("size", false);
+                return false;
+            }
+            console.log("size", true);
+            return true;
+        },
+
+        setBomb: function () {
+            var pointer = document.getElementById("pointer");
+            pointer.classList.add("url");
+        },
+
+        addSalvo: function (id) {
+            var bombCell = document.getElementById(id);
+            if (0 < this.bombs && !bombCell.className.includes("bomb")) {
+                bombCell.classList.add("bomb");
+                this.bombs -= 1;
+                this.bombPos.push(bombCell.id.slice(1));
+            } else {
+                alert("all bombs are placed or already exist on this cell");
+            }
+            this.salvosList.locations = this.bombPos;
+            console.log("salvoList push", this.salvosList);
         }
+
     },
     created: function () {
         this.fetchInit();
