@@ -10,27 +10,27 @@
     <title>Salvo web</title>
 </head>
 
-<body class="body-games">
+<body class="body-games container">
 
-    <header>
+    <div class="row col-lg-2 col-md-2 col-sm-2 col-xs-12">
         <div class="logoSalvo">
             <img src="/styles/img/logo.png" class="logo">
         </div>
-    </header>
+    </div>
 
-    <main id="app">
+    <div id="app" class="row col-lg-10 col-md-10 col-sm-10 col-xs-12">
 
-        <div class="content65">
-            <form id="login-form" onsubmit="return false" class="log" v-if="current==null">
+        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <form id="login-form" onsubmit="return false" v-if="current==null">
                 <label>Name: <input type="email" id="username"></label>
                 <label>Password: <input type="password" id="password"></label>
-                <div>
+                <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <button @click="login" class="btn btn-primary btn-md">Log in</button>
                 <button @click="signUp" class="btn btn-primary btn-md">SignUp</button>
                 </div>
             </form>
 
-            <div v-else>
+            <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12" v-else>
                 <form id="logout-form" onsubmit="return false">
                     <button @click="logout"  class="btn btn-primary btn-md">Log out</button>
                     <button @click="createGame"  class="btn btn-primary btn-md">New Game</button>
@@ -39,7 +39,7 @@
 
         </div>
 
-        <div class="center">
+        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <h4 class="textBlack">Games</h4>
             <ol class="list-group">
                 <li class="list-group-item" v-for="game in games">Date: {{game.date}}<span v-for="player in game.gamePlayers">
@@ -48,7 +48,7 @@
         </div>
 
 
-        <div class="center">
+        <div class="row col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <h4 class="textBlack">Leaderboard</h4>
             <table class="table-bordered">
                 <thead class="table">
@@ -71,7 +71,7 @@
                 </tbody>
             </table>
         </div>
-    </main>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script src="/scripts/games.js"></script>

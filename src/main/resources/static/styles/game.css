@@ -7,7 +7,7 @@
     url('seasrn__.woff') format('svg');
 }
 
-/*-----TITLE----*/
+/*-----HEADER----*/
 
 .logoSalvo {
   width: 100px;
@@ -20,37 +20,27 @@
 }
 
 .title {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-content: center;
-  justify-items: center;
-  align-items: center;
-  width: 100%;
-  height: 140px;
-  color: white;
-}
-
-.playerstitle {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-content: center;
-  justify-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 140px;
+    color: white;
 }
 
 .playerstitle>h3 {
-  display: flex;
+   display: flex;
   flex-direction: row;
   justify-content: center;
   align-content: center;
-  align-items: center;
+  align-items: center; 
   background-color: rgb(77, 77, 77);
   opacity: 0.9;
   font-family: arcade;
   padding: 5px;
   color: yellow;
   border: 2px solid black;
+  width: 220px;
 }
 
 .marcador {
@@ -61,11 +51,7 @@
 .scores {
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
   justify-content: center;
-  align-content: center;
-  align-items: center;
-  width: 100%;
   height: 120px;
   background-color: rgb(77, 77, 77);
   opacity: 0.9;
@@ -91,13 +77,9 @@
 }
 
 /*-----------BODY--------*/
-/*-------LOGIN------*/
-form{
-  width: 100%;
-}
 
-#logout-form{
-width: 100%;
+#logout-form {
+  width: 100%;
 }
 
 .log {
@@ -130,7 +112,6 @@ a {
 }
 
 .body-games {
-  width: 100%;
   padding: 10px;
   background-image: url("img/fondo.png");
   background-size: cover;
@@ -143,14 +124,6 @@ a {
   background-size: cover;
   background-position: center;
   color: white;
-}
-
-.allbody {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  width: 100%;
 }
 
 .container-fluid {
@@ -178,7 +151,7 @@ a {
   width: 65%;
 }
 
-.middle{
+.middle {
   border: 2px solid black;
   background-color: rgb(77, 77, 77);
   opacity: 0.9;
@@ -203,7 +176,7 @@ a {
 /*-----TABLES------*/
 
 .table-bordered {
-  width: 50%;
+  width: 100%;
   height: 200px;
   color: white;
   background-color: black;
@@ -213,7 +186,6 @@ a {
 .tables {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
   width: 100%;
   margin-bottom: 20px;
 }
@@ -268,8 +240,8 @@ td {
   color: red;
 }
 
-.barcos{
-  background-color: steelblue;
+.barcos {
+  background-color: green;
 }
 
 .water {
@@ -293,7 +265,7 @@ td {
 
 /*--------LIST---------*/
 .list-group {
-  width: 50%;
+  width: 100%;
   background-color: black;
   opacity: 0.7;
 }

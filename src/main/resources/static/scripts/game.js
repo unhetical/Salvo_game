@@ -234,8 +234,7 @@ var app = new Vue({
                 for (let key2 in this.shipLives) {
                     if (this.hits[key] == key2) {
                         this.shipLives[key2] -= 1;
-                    } else if (this.shipLives[key2] == 0) {
-                    }
+                    } else if (this.shipLives[key2] == 0) {}
                 }
             }
         },
@@ -337,19 +336,30 @@ var app = new Vue({
                 this.shipPosi = "vertical";
                 this.shipElement.className = this.shipElement.id + "-v";
                 console.log(this.shipPosi);
-                this.drop_handler();
+                this.placeVertical(shipElement);
 
             } else if (this.shipPosi == "vertical") {
                 this.shipElement.setAttribute("data-pos", "horizontal");
                 this.shipPosi = "horizontal";
                 this.shipElement.className = this.shipElement.id;
                 console.log(this.shipPosi);
-                this.drop_handler();
 
             } else {
                 return false
             }
 
+        },
+
+        placeVertical: function (shipElement) {
+            if (this.shipPosi == "vertical") {
+                for (let x = 0; x < this.shipList.length; x++) {
+                    if (this.shipList[x].shipName == shipElement.id) {
+                        this.shipList[x].locations[0];
+                        this.shipList[x].locations = [];
+                        this.shipList[x].locations = this.positions;
+                    }
+                }
+            }
         },
 
         exist: function () {

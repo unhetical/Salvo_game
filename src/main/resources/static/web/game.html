@@ -10,15 +10,15 @@
     <title>Salvo Game</title>
 </head>
 
-<body class="body-game">
-    <div id="app" class="allbody">
+<body class="body-game container">
+    <div id="app">
 
-        <header class="title">
-            <div class="playerstitle">
+        <div class="title row col-12">
+            <div class="playerstitle col-4">
                 <h3>Current Player: {{currentPlayer.email}}</h3>
             </div>
 
-            <div class="marcador">
+            <div class="marcador col-4">
                 <div class="scores">
                     <h4>Local</h4>
                     <h1>{{currentScore}}</h1>
@@ -30,14 +30,14 @@
                 </div>
             </div>
 
-            <div class="playerstitle">
+            <div class="playerstitle col-4">
                 <h3>Opponent Player: {{opponentPlayer.email}}</h3>
             </div>
-        </header>
+        </div>
 
-        <main class="allbody">
+        <div class="allbody container">
 
-            <div>
+            <div class="row">
                 <form id="logout-form" onsubmit="return false">
                     <button v-if="ships.length == 0" class="btn btn-primary btn-md" @click="placeShips()">Place ships</button>
                     <button class="btn btn-primary btn-md"> <a href="games.html">Leave game</a></button>
@@ -45,7 +45,7 @@
                 </form>
             </div>
 
-            <div class="tables">
+            <div class="tables row col-12">
                 <table class="table1">
                     <thead>
                         <th class="th" v-for="value in numeros">{{value}}</th>
@@ -66,7 +66,7 @@
 
                     <ul>
                         <li class="textBlack">HITS ON YOU</li>
-                     <li v-for="(ship, index) in shipLives" >({{ship}}){{index}}</li>
+                        <li v-for="(ship, index) in shipLives">({{ship}}){{index}}</li>
                     </ul>
 
                 </div>
@@ -84,7 +84,7 @@
                 </table>
             </div>
 
-            <div class="container-fluid" v-if="ships.length == 0">
+            <div class="container-fluid row" v-if="ships.length == 0">
                 <div class="AircraftCarrier" data-size="5" data-pos="horizontal" id="AircraftCarrier" draggable="true"
                     @dragstart="dragstart_handler" @dragend="dragend_handler"><button class="rotar" @click="rotate(AircraftCarrier)"></button></div>
                 <div class="Submarine" data-size="3" data-pos="horizontal" id="Submarine" draggable="true" @dragstart="dragstart_handler"
@@ -96,10 +96,10 @@
                 <div class="PatrolBoat" data-size="2" data-pos="horizontal" id="PatrolBoat" draggable="true" @dragstart="dragstart_handler"
                     @dragend="dragend_handler"><button class="rotar" @click="rotate(PatrolBoat)"></button></div>
 
-        </main>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-    <script src="/scripts/game.js"></script>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+        <script src="/scripts/game.js"></script>
 </body>
 
 </html>
